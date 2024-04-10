@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "984047369815",
+    "project_id": "plantsnap-419307",
+    "storage_bucket": "plantsnap-419307.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984047369815:android:362d7822097b3d5481ad12",
+        "android_client_info": {
+          "package_name": "com.plantsnap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984047369815-0fpi1gh0dipjhh84anooaef6cbdm0hep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.plantsnap",
+            "certificate_hash": "9e58d0e131caabee677fe6198e5dd94bf00f56f5"
+          }
+        },
+        {
+          "client_id": "984047369815-d5oq3k8tn8vtlm3u2op1qlqij3sb6gbt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZlVVXPYLo1SGO74JeE4cS-3eiePONVFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984047369815-d5oq3k8tn8vtlm3u2op1qlqij3sb6gbt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

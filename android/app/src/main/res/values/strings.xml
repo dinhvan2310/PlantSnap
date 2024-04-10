@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PlantSnap</string>
+    
+<string name="facebook_app_id">7064156487029436</string>
+<string name="fb_login_protocol_scheme">fb1234</string>
+<string name="facebook_client_token">3127a9cf15484fe9d888eff77b7ca57d</string>
+
+
 </resources>
