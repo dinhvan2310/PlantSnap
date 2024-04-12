@@ -1,7 +1,8 @@
 import {Eye, EyeSlash} from 'iconsax-react-native';
 import React, {useState} from 'react';
-import {TextInput, TouchableOpacity, View} from 'react-native';
+import {TextInput, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {colors} from '../constants/colors';
+import SpaceComponent from './SpaceComponent';
 
 interface InputComponentProps {
   placeholder?: string;
@@ -9,26 +10,38 @@ interface InputComponentProps {
   value?: string;
   keyboardType?: 'email-address' | 'numeric' | 'phone-pad' | 'default';
   isPassword?: boolean;
+  styles?: ViewStyle;
+  icon?: React.ReactNode;
 }
 
 const InputComponent = ({
   placeholder,
+
   onChange,
   value,
   keyboardType,
   isPassword,
+  styles,
+  icon,
 }: InputComponentProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <View
-      style={{
-        backgroundColor: colors.secondary,
-        borderRadius: 14,
-        paddingHorizontal: 24,
-        paddingVertical: 18,
-        flexDirection: 'row',
-      }}>
+      style={[
+        {
+          backgroundColor: colors.secondary,
+          borderRadius: 14,
+          paddingHorizontal: 24,
+          paddingVertical: 18,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        styles,
+      ]}>
+      {icon && icon}
+      {icon && <SpaceComponent width={16} />}
       <TextInput
         placeholder={placeholder}
         placeholderTextColor={colors.placeholder}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, View, ViewStyle} from 'react-native';
 import {colors} from '../constants/colors';
 import propTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
@@ -10,7 +10,7 @@ interface ContainerProps {
   right?: boolean;
   children: React.ReactNode;
   isScroll?: boolean;
-  styles?: object;
+  styles?: ViewStyle;
 }
 
 const Container = (props: ContainerProps) => {

@@ -9,8 +9,13 @@ export default function App() {
     <SafeAreaView
       style={{
         flex: 1,
+        backgroundColor: '#fff',
       }}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
+      <StatusBar
+        translucent
+        backgroundColor={'transparent'}
+        barStyle={'light-content'}
+      />
       <NavigationContainer>
         <AppNav />
       </NavigationContainer>

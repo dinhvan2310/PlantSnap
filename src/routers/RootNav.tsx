@@ -7,7 +7,7 @@ import {
   Setting2,
 } from 'iconsax-react-native';
 import React, {useEffect} from 'react';
-import {Animated, StyleSheet, TouchableOpacity} from 'react-native';
+import {Animated, StatusBar, StyleSheet, TouchableOpacity} from 'react-native';
 import {CurvedBottomBarExpo} from 'react-native-curved-bottom-bar';
 import {colors} from '../constants/colors';
 import CameraScreen from '../screens/CameraScreen';
@@ -17,6 +17,7 @@ import SearchScreen from '../screens/SearchScreen';
 import SettingScreen from '../screens/SettingScreen';
 
 export default function RootNav({navigation}: any) {
+  StatusBar.setBarStyle('dark-content');
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(user => {
       if (!user) {
@@ -80,7 +81,7 @@ export default function RootNav({navigation}: any) {
       shadowStyle={styles.shawdow}
       height={55}
       circleWidth={50}
-      bgColor="white"
+      bgColor={colors.white2}
       initialRouteName="Home"
       borderTopLeftRight
       renderCircle={({selectedTab, navigate}) => (
@@ -97,26 +98,41 @@ export default function RootNav({navigation}: any) {
         name="Home"
         position="LEFT"
         component={() => <HomeScreen />}
+        options={{
+          headerShown: false,
+        }}
       />
       <CurvedBottomBarExpo.Screen
         name="Search"
         component={() => <SearchScreen />}
         position="LEFT"
+        options={{
+          headerShown: false,
+        }}
       />
       <CurvedBottomBarExpo.Screen
         name="History"
         position="RIGHT"
         component={() => <HistoryScreen />}
+        options={{
+          headerShown: false,
+        }}
       />
       <CurvedBottomBarExpo.Screen
         name="Setting"
         position="RIGHT"
         component={() => <SettingScreen />}
+        options={{
+          headerShown: false,
+        }}
       />
       <CurvedBottomBarExpo.Screen
         name="Camera"
         position="CENTER"
         component={() => <CameraScreen />}
+        options={{
+          headerShown: false,
+        }}
       />
     </CurvedBottomBarExpo.Navigator>
   );
@@ -147,7 +163,7 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#E8E8E8',
+    backgroundColor: colors.white2,
     bottom: 30,
     shadowColor: '#000',
     shadowOffset: {

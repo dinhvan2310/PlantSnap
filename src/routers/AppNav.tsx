@@ -4,15 +4,17 @@ import {getItem, removeItem} from '../utils/asyncStorage';
 import AuthNav from './AuthNav';
 import HomeNav from './RootNav';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import {StatusBar} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 const AppNav = () => {
   const [isOnboarding, setIsOnboarding] = React.useState<null | boolean>(null);
+
   React.useEffect(() => {
     const func = async () => {
       try {
-        // await removeItem('onboarding');
+        await removeItem('onboarding');
         const value = await getItem('onboarding');
         if (value == null) {
           setIsOnboarding(true);

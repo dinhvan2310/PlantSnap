@@ -1,6 +1,15 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Text, TextStyle, ViewStyle} from 'react-native';
 import {colors} from '../constants/colors';
+
+interface DescComponentProps {
+  text: string;
+  color?: string;
+  size?: number;
+  fontFamily?: string;
+  style?: TextStyle;
+  lineHeight?: number;
+}
 
 const DescComponent = ({
   text,
@@ -9,7 +18,7 @@ const DescComponent = ({
   fontFamily,
   style,
   lineHeight,
-}: any) => {
+}: DescComponentProps) => {
   return (
     <Text
       style={[

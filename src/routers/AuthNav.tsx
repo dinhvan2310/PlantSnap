@@ -4,6 +4,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignInScreen from '../auth/SignInScreen';
 import SignUpScreen from '../auth/SignUpScreen';
 import auth from '@react-native-firebase/auth';
+import ForgetPassScreen from '../auth/ForgetPassScreen';
+import {colors} from '../constants/colors';
 
 const AuthNav = ({navigation}: any) => {
   const Stack = createNativeStackNavigator();
@@ -34,6 +36,17 @@ const AuthNav = ({navigation}: any) => {
         }}
         name="SignUp"
         component={SignUpScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: '',
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerShadowVisible: false,
+        }}
+        name="ForgetPass"
+        component={ForgetPassScreen}
       />
     </Stack.Navigator>
   );

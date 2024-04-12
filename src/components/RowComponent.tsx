@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View, ViewStyle} from 'react-native';
 import {globalStyles} from '../styles/globalStyles';
 
 interface RowComponentProps {
@@ -11,7 +11,7 @@ interface RowComponentProps {
     | 'flex-start'
     | 'flex-end';
   onPress?: () => void;
-  styles?: object;
+  styles?: ViewStyle;
 }
 
 const RowComponent = ({

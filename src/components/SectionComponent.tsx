@@ -1,19 +1,22 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 
 interface SectionComponentProps {
   children: React.ReactNode;
-  styles?: object;
+  styles?: ViewStyle;
+  marginBottom?: number;
+  marginTop?: number;
 }
 
 const SectionComponent = (props: SectionComponentProps) => {
-  const {children, styles} = props;
+  const {children, styles, marginBottom, marginTop} = props;
   return (
     <View
       style={[
         {
-          marginBottom: 16,
+          marginBottom: marginBottom ?? 16,
+          marginTop: marginTop ?? 0,
         },
         styles,
       ]}>

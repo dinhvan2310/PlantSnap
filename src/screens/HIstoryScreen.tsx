@@ -75,12 +75,85 @@
 
 import {View, Text} from 'react-native';
 import React from 'react';
+import Container from '../components/Container';
+import SectionComponent from '../components/SectionComponent';
+import InputComponent from '../components/InputComponent';
+import {SearchNormal} from 'iconsax-react-native';
+import {colors} from '../constants/colors';
+import CardComponent from '../components/CardComponent';
+import SpaceComponent from '../components/SpaceComponent';
 
 const HIstoryScreen = () => {
   return (
-    <View>
-      <Text>HIstoryScreen</Text>
-    </View>
+    <Container isScroll={false}>
+      <SectionComponent>
+        <InputComponent
+          icon={<SearchNormal size={24} color={colors.decs} />}
+          placeholder="Search plant"
+          onChange={() => {}}
+          styles={{
+            paddingVertical: 8,
+          }}
+        />
+      </SectionComponent>
+
+      <Container
+        isScroll={true}
+        styles={{
+          paddingTop: 0,
+          paddingHorizontal: 0,
+        }}>
+        <SectionComponent marginBottom={28}>
+          <CardComponent
+            type="large"
+            title="Monstera"
+            desc="This is a description"
+            time="2 hours ago"
+          />
+        </SectionComponent>
+        <SectionComponent marginBottom={28}>
+          <CardComponent
+            type="large"
+            title="Monstera"
+            desc="This is a description"
+            time="2 hours ago"
+          />
+        </SectionComponent>
+        <SectionComponent marginBottom={28}>
+          <CardComponent
+            type="large"
+            title="Monstera"
+            desc="This is a description"
+            time="2 hours ago"
+          />
+        </SectionComponent>
+        <SectionComponent marginBottom={28}>
+          <CardComponent
+            type="large"
+            title="Monstera"
+            desc="This is a description"
+            time="2 hours ago"
+          />
+        </SectionComponent>
+        <SectionComponent marginBottom={28}>
+          <CardComponent
+            type="large"
+            title="Monstera"
+            desc="This is a description"
+            time="2 hours ago"
+          />
+        </SectionComponent>
+        <SectionComponent marginBottom={28}>
+          <CardComponent
+            type="large"
+            title="Monstera"
+            desc="This is a description"
+            time="2 hours ago"
+          />
+        </SectionComponent>
+        <SpaceComponent height={64} />
+      </Container>
+    </Container>
   );
 };
 
