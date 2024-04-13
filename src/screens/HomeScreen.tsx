@@ -1,4 +1,4 @@
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, StatusBar} from 'react-native';
 import React, {useEffect} from 'react';
 import Container from '../components/Container';
 import TitleComponent from '../components/TitleComponent';
@@ -20,8 +20,7 @@ const HomeScreen = (props: HomeScreenProps) => {
   const {refTabBar} = props;
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', e => {
-      // Prevent default behavior
-      console.log('HomeScreen focused');
+      StatusBar.setBackgroundColor('transparent');
       if (refTabBar) {
         refTabBar.current.setVisible(true);
       }

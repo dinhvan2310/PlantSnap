@@ -73,16 +73,16 @@
 //   },
 // });
 
-import {View, Text} from 'react-native';
-import React from 'react';
-import Container from '../components/Container';
-import SectionComponent from '../components/SectionComponent';
-import InputComponent from '../components/InputComponent';
-import {SearchNormal} from 'iconsax-react-native';
-import {colors} from '../constants/colors';
-import CardComponent from '../components/CardComponent';
-import SpaceComponent from '../components/SpaceComponent';
 import {useNavigation} from '@react-navigation/native';
+import {SearchNormal} from 'iconsax-react-native';
+import React from 'react';
+import CardComponent from '../components/CardComponent';
+import Container from '../components/Container';
+import InputComponent from '../components/InputComponent';
+import SectionComponent from '../components/SectionComponent';
+import SpaceComponent from '../components/SpaceComponent';
+import {colors} from '../constants/colors';
+import {StatusBar} from 'react-native';
 
 interface HistoryScreenProps {
   refTabBar: any;
@@ -93,8 +93,7 @@ const HistoryScreen = (props: HistoryScreenProps) => {
   const {refTabBar} = props;
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', e => {
-      // Prevent default behavior
-      console.log('HomeScreen focused');
+      StatusBar.setBackgroundColor('transparent');
       if (refTabBar) {
         refTabBar.current.setVisible(true);
       }

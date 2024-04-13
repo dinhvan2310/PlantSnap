@@ -147,5 +147,3 @@ const styles = StyleSheet.create({
 });
 
 export default OnboardingScreen;
-
-// ẩn tab bar khi vào màn hình camera

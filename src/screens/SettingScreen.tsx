@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, StatusBar} from 'react-native';
 import React from 'react';
 import {setItem} from '../utils/asyncStorage';
 import {onSignOutPress} from '../auth/authContext';
@@ -13,8 +13,7 @@ const SettingScreen = (props: SettingScreenProps) => {
   const {refTabBar} = props;
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', e => {
-      // Prevent default behavior
-      console.log('HomeScreen focused');
+      StatusBar.setBackgroundColor('transparent');
       if (refTabBar) {
         refTabBar.current.setVisible(true);
       }

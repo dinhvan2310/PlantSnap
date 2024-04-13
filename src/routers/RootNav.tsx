@@ -104,7 +104,7 @@ export default function RootNav({navigation}: any) {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                (ref?.current as any)?.setVisible(false);
+                // (ref?.current as any)?.setVisible(false);
                 navigate('Camera');
               }}>
               <Camera size={24} color={colors.primary} />
@@ -144,7 +144,7 @@ export default function RootNav({navigation}: any) {
       <CurvedBottomBarExpo.Screen
         name="Camera"
         position="CENTER"
-        component={() => <CameraScreen />}
+        component={() => <CameraScreen refTabBar={ref} />}
         options={{
           tabBarStyle: {display: 'none'},
         }}

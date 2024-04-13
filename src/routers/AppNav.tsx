@@ -5,7 +5,6 @@ import AuthNav from './AuthNav';
 import HomeNav from './RootNav';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import {StatusBar} from 'react-native';
-import RootNav2 from './RootNav2';
 import RootNav from './RootNav';
 
 const Stack = createNativeStackNavigator();
@@ -16,7 +15,7 @@ const AppNav = () => {
   React.useEffect(() => {
     const func = async () => {
       try {
-        await removeItem('onboarding');
+        // await removeItem('onboarding');
         const value = await getItem('onboarding');
         if (value == null) {
           setIsOnboarding(true);
@@ -76,7 +75,7 @@ const AppNav = () => {
           headerShown: false,
         }}
         name="Root"
-        component={RootNav2}
+        component={RootNav}
       />
     </Stack.Navigator>
   );
