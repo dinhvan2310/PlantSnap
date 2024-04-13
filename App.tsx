@@ -1,12 +1,12 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AppNav from './src/routers/AppNav';
 
 export default function App() {
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         backgroundColor: '#fff',
@@ -19,6 +19,6 @@ export default function App() {
       <NavigationContainer>
         <AppNav />
       </NavigationContainer>
-    </SafeAreaView>
+    </View>
   );
 }

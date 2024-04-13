@@ -1,5 +1,5 @@
 import {View, Text, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Container from '../components/Container';
 import TitleComponent from '../components/TitleComponent';
 import SectionComponent from '../components/SectionComponent';
@@ -8,8 +8,28 @@ import DescComponent from '../components/DescComponent';
 import {Logout} from 'iconsax-react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {colors} from '../constants/colors';
+import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
 
-const HomeScreen = () => {
+interface HomeScreenProps {
+  refTabBar: any;
+}
+
+const HomeScreen = (props: HomeScreenProps) => {
+  const navigation = useNavigation();
+  const {refTabBar} = props;
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', e => {
+      // Prevent default behavior
+      console.log('HomeScreen focused');
+      if (refTabBar) {
+        refTabBar.current.setVisible(true);
+      }
+      // ...
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   return (
     <Container>
       <SectionComponent>
@@ -43,7 +63,14 @@ const HomeScreen = () => {
               />
             </View>
           </RowComponent>
-          <Icon name="sign-out" size={24} color={colors.decs} />
+          <Icon
+            name="sign-out"
+            size={24}
+            color={colors.decs}
+            onPress={() => {
+              auth().signOut();
+            }}
+          />
         </RowComponent>
       </SectionComponent>
     </Container>

@@ -5,6 +5,8 @@ import AuthNav from './AuthNav';
 import HomeNav from './RootNav';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import {StatusBar} from 'react-native';
+import RootNav2 from './RootNav2';
+import RootNav from './RootNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,7 +56,7 @@ const AppNav = () => {
             headerShown: false,
           }}
           name="Root"
-          component={HomeNav}
+          component={RootNav}
         />
       </Stack.Navigator>
     );
@@ -74,7 +76,7 @@ const AppNav = () => {
           headerShown: false,
         }}
         name="Root"
-        component={HomeNav}
+        component={RootNav2}
       />
     </Stack.Navigator>
   );

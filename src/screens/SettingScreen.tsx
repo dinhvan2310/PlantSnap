@@ -2,8 +2,27 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {setItem} from '../utils/asyncStorage';
 import {onSignOutPress} from '../auth/authContext';
+import {useNavigation} from '@react-navigation/native';
 
-const SettingScreen = () => {
+interface SettingScreenProps {
+  refTabBar: any;
+}
+
+const SettingScreen = (props: SettingScreenProps) => {
+  const navigation = useNavigation();
+  const {refTabBar} = props;
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', e => {
+      // Prevent default behavior
+      console.log('HomeScreen focused');
+      if (refTabBar) {
+        refTabBar.current.setVisible(true);
+      }
+      // ...
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   return (
     <View>
       <TouchableOpacity

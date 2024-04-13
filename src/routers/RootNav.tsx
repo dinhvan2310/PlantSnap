@@ -7,17 +7,25 @@ import {
   Setting2,
 } from 'iconsax-react-native';
 import React, {useEffect} from 'react';
-import {Animated, StatusBar, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Animated,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CurvedBottomBarExpo} from 'react-native-curved-bottom-bar';
 import {colors} from '../constants/colors';
 import CameraScreen from '../screens/CameraScreen';
-import HistoryScreen from '../screens/HIstoryScreen';
+import HistoryScreen from '../screens/HistoryScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SettingScreen from '../screens/SettingScreen';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 export default function RootNav({navigation}: any) {
   StatusBar.setBarStyle('dark-content');
+  const ref = React.useRef(null);
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(user => {
       if (!user) {
@@ -76,6 +84,10 @@ export default function RootNav({navigation}: any) {
 
   return (
     <CurvedBottomBarExpo.Navigator
+      ref={ref}
+      screenOptions={{
+        headerShown: false,
+      }}
       type="DOWN"
       style={styles.bottomBar}
       shadowStyle={styles.shawdow}
@@ -84,54 +96,57 @@ export default function RootNav({navigation}: any) {
       bgColor={colors.white2}
       initialRouteName="Home"
       borderTopLeftRight
-      renderCircle={({selectedTab, navigate}) => (
-        <Animated.View style={styles.btnCircleUp}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigate('Camera')}>
-            <Camera size={24} color={colors.primary} />
-          </TouchableOpacity>
-        </Animated.View>
-      )}
+      backBehavior="initialRoute"
+      defaultScreenOptions={{}}
+      renderCircle={({selectedTab, navigate}: any) => {
+        return (
+          <Animated.View style={styles.btnCircleUp}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                (ref?.current as any)?.setVisible(false);
+                navigate('Camera');
+              }}>
+              <Camera size={24} color={colors.primary} />
+            </TouchableOpacity>
+          </Animated.View>
+        );
+      }}
       tabBar={renderTabBar}>
       <CurvedBottomBarExpo.Screen
         name="Home"
         position="LEFT"
-        component={() => <HomeScreen />}
-        options={{
-          headerShown: false,
-        }}
+        component={() => <HomeScreen refTabBar={ref} />}
+        // listeners={{
+        //   state: e => {
+        //     ref.current.setVisible(true);
+        //   },
+        // }}
       />
       <CurvedBottomBarExpo.Screen
         name="Search"
-        component={() => <SearchScreen />}
+        component={() => <SearchScreen refTabBar={ref} />}
         position="LEFT"
-        options={{
-          headerShown: false,
-        }}
+        options={{}}
       />
       <CurvedBottomBarExpo.Screen
         name="History"
         position="RIGHT"
-        component={() => <HistoryScreen />}
-        options={{
-          headerShown: false,
-        }}
+        component={() => <HistoryScreen refTabBar={ref} />}
+        options={{}}
       />
       <CurvedBottomBarExpo.Screen
         name="Setting"
         position="RIGHT"
-        component={() => <SettingScreen />}
-        options={{
-          headerShown: false,
-        }}
+        component={() => <SettingScreen refTabBar={ref} />}
+        options={{}}
       />
       <CurvedBottomBarExpo.Screen
         name="Camera"
         position="CENTER"
         component={() => <CameraScreen />}
         options={{
-          headerShown: false,
+          tabBarStyle: {display: 'none'},
         }}
       />
     </CurvedBottomBarExpo.Navigator>

@@ -10,8 +10,27 @@ import RowComponent from '../components/RowComponent';
 import CardComponent from '../components/CardComponent';
 import SpaceComponent from '../components/SpaceComponent';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
 
-const SearchScreen = () => {
+interface SearchScreenProps {
+  refTabBar: any;
+}
+
+const SearchScreen = (props: SearchScreenProps) => {
+  const navigation = useNavigation();
+  const {refTabBar} = props;
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', e => {
+      // Prevent default behavior
+      console.log('HomeScreen focused');
+      if (refTabBar) {
+        refTabBar.current.setVisible(true);
+      }
+      // ...
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   return (
     <Container isScroll={false}>
       <SectionComponent>

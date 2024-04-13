@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, View, ViewStyle} from 'react-native';
+import {ScrollView, StatusBar, View, ViewStyle} from 'react-native';
 import {colors} from '../constants/colors';
 import propTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
@@ -11,13 +11,28 @@ interface ContainerProps {
   children: React.ReactNode;
   isScroll?: boolean;
   styles?: ViewStyle;
+  statusBarColor?: string;
 }
 
 const Container = (props: ContainerProps) => {
-  const {title, back, right, children, isScroll = true, styles} = props;
+  const {
+    title,
+    back,
+    right,
+    children,
+    isScroll = true,
+    styles,
+    statusBarColor = colors.white,
+  } = props;
 
   const navigation = useNavigation();
-
+  // React.useEffect(() => {
+  //   {
+  //     console.log('statusBarColor', statusBarColor);
+  //     StatusBar.setBackgroundColor('transparent');
+  //     StatusBar.setTranslucent(false);
+  //   }
+  // }, []);
   return (
     <View
       style={[
@@ -25,7 +40,7 @@ const Container = (props: ContainerProps) => {
           flex: 1,
           backgroundColor: colors.white,
           paddingHorizontal: 16,
-          paddingTop: 32,
+          paddingTop: 52,
         },
         styles,
       ]}>

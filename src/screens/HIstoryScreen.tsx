@@ -82,8 +82,27 @@ import {SearchNormal} from 'iconsax-react-native';
 import {colors} from '../constants/colors';
 import CardComponent from '../components/CardComponent';
 import SpaceComponent from '../components/SpaceComponent';
+import {useNavigation} from '@react-navigation/native';
 
-const HIstoryScreen = () => {
+interface HistoryScreenProps {
+  refTabBar: any;
+}
+
+const HistoryScreen = (props: HistoryScreenProps) => {
+  const navigation = useNavigation();
+  const {refTabBar} = props;
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', e => {
+      // Prevent default behavior
+      console.log('HomeScreen focused');
+      if (refTabBar) {
+        refTabBar.current.setVisible(true);
+      }
+      // ...
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   return (
     <Container isScroll={false}>
       <SectionComponent>
@@ -157,4 +176,4 @@ const HIstoryScreen = () => {
   );
 };
 
-export default HIstoryScreen;
+export default HistoryScreen;
