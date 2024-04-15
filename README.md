@@ -29,3 +29,6 @@ PlanSnap là một ứng dụng di động giúp người dùng nhận diện v�
 - Implement UI/UX
 - Classify plant
 - Display plant information
+
+
+set(ENABLE_FRAME_PROCESSORS ON)

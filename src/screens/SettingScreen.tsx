@@ -9,19 +9,19 @@ interface SettingScreenProps {
 }
 
 const SettingScreen = (props: SettingScreenProps) => {
-  const navigation = useNavigation();
-  const {refTabBar} = props;
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', e => {
-      StatusBar.setBackgroundColor('transparent');
-      if (refTabBar) {
-        refTabBar.current.setVisible(true);
-      }
-      // ...
-    });
+  // const navigation = useNavigation();
+  // const {refTabBar} = props;
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', e => {
+  //     StatusBar.setBackgroundColor('transparent');
+  //     if (refTabBar) {
+  //       refTabBar.current.setVisible(true);
+  //     }
+  //     // ...
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
   return (
     <View>
       <TouchableOpacity

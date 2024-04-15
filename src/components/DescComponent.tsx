@@ -3,7 +3,7 @@ import {Text, TextStyle, ViewStyle} from 'react-native';
 import {colors} from '../constants/colors';
 
 interface DescComponentProps {
-  text: string;
+  text: string | undefined | null;
   color?: string;
   size?: number;
   fontFamily?: string;

@@ -1,8 +1,17 @@
 import React from 'react';
-import {ScrollView, StatusBar, View, ViewStyle} from 'react-native';
+import {
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {colors} from '../constants/colors';
 import propTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
+import RowComponent from './RowComponent';
+import {ArrowLeft2} from 'iconsax-react-native';
+import DescComponent from './DescComponent';
 
 interface ContainerProps {
   title?: string;
@@ -11,6 +20,7 @@ interface ContainerProps {
   children: React.ReactNode;
   isScroll?: boolean;
   styles?: ViewStyle;
+  full?: boolean;
   statusBarColor?: string;
 }
 
@@ -22,6 +32,7 @@ const Container = (props: ContainerProps) => {
     children,
     isScroll = true,
     styles,
+    full,
     statusBarColor = colors.white,
   } = props;
 
@@ -33,6 +44,43 @@ const Container = (props: ContainerProps) => {
   //     StatusBar.setTranslucent(false);
   //   }
   // }, []);
+  if (full) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.white,
+          paddingHorizontal: 16,
+          paddingTop: 52,
+        }}>
+        <RowComponent
+          styles={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {back && (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                zIndex: 3000,
+              }}>
+              <ArrowLeft2 size={24} color={colors.white} />
+            </TouchableOpacity>
+          )}
+          <View style={{flex: 1, zIndex: -1}}>
+            {title && (
+              <DescComponent
+                size={16}
+                text={title}
+                style={{textAlign: 'center', marginLeft: back ? -24 : 0}}
+              />
+            )}
+          </View>
+        </RowComponent>
+        {children}
+      </View>
+    );
+  }
   return (
     <View
       style={[
@@ -46,7 +94,7 @@ const Container = (props: ContainerProps) => {
       ]}>
       {/* Header container */}
 
-      {/* <RowComponent
+      <RowComponent
         styles={{
           paddingHorizontal: 16,
           paddingBottom: 16,
@@ -60,16 +108,14 @@ const Container = (props: ContainerProps) => {
         )}
         <View style={{flex: 1, zIndex: -1}}>
           {title && (
-            <TextComponent
-              flex={0}
-              fontFamily={fontFamilies.PoppinsBold}
+            <DescComponent
               size={16}
               text={title}
-              textStyles={{textAlign: 'center', marginLeft: back ? -24 : 0}}
+              style={{textAlign: 'center', marginLeft: back ? -24 : 0}}
             />
           )}
         </View>
-      </RowComponent> */}
+      </RowComponent>
       {isScroll ? (
         <ScrollView
           style={{flex: 1, flexGrow: 1}}

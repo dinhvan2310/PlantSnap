@@ -89,19 +89,19 @@ interface HistoryScreenProps {
 }
 
 const HistoryScreen = (props: HistoryScreenProps) => {
-  const navigation = useNavigation();
-  const {refTabBar} = props;
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', e => {
-      StatusBar.setBackgroundColor('transparent');
-      if (refTabBar) {
-        refTabBar.current.setVisible(true);
-      }
-      // ...
-    });
+  // const navigation = useNavigation();
+  // const {refTabBar} = props;
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', e => {
+  //     StatusBar.setBackgroundColor('transparent');
+  //     if (refTabBar) {
+  //       refTabBar.current.setVisible(true);
+  //     }
+  //     // ...
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
   return (
     <Container isScroll={false}>
       <SectionComponent>

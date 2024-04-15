@@ -6,6 +6,7 @@ import HomeNav from './RootNav';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import {StatusBar} from 'react-native';
 import RootNav from './RootNav';
+import RootNav2 from './RootNav2';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,7 +36,7 @@ const AppNav = () => {
 
   if (isOnboarding) {
     return (
-      <Stack.Navigator initialRouteName="Onboarding">
+      <Stack.Navigator initialRouteName="Onboarding" screenOptions={{}}>
         <Stack.Screen
           options={{
             headerShown: false,
@@ -55,7 +56,7 @@ const AppNav = () => {
             headerShown: false,
           }}
           name="Root"
-          component={RootNav}
+          component={RootNav2}
         />
       </Stack.Navigator>
     );
@@ -75,7 +76,7 @@ const AppNav = () => {
           headerShown: false,
         }}
         name="Root"
-        component={RootNav}
+        component={RootNav2}
       />
     </Stack.Navigator>
   );

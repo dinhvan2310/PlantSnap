@@ -22,6 +22,10 @@ import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SettingScreen from '../screens/SettingScreen';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import SearchNavigation from './navigation/SearchNavigation';
+import HomeNavigation from './navigation/HomeNavigation';
+import HistoryNavigation from './navigation/HistoryNavigation';
+import SettingNavigation from './navigation/SettingNavigation';
 
 export default function RootNav({navigation}: any) {
   StatusBar.setBarStyle('dark-content');
@@ -49,7 +53,7 @@ export default function RootNav({navigation}: any) {
             color={selectedTab === 'Home' ? colors.primary : colors.gray}
           />
         );
-      case 'Search':
+      case 'SearchNavigation':
         return (
           <SearchNormal1
             size={24}
@@ -116,7 +120,7 @@ export default function RootNav({navigation}: any) {
       <CurvedBottomBarExpo.Screen
         name="Home"
         position="LEFT"
-        component={() => <HomeScreen refTabBar={ref} />}
+        component={() => <HomeNavigation />}
         // listeners={{
         //   state: e => {
         //     ref.current.setVisible(true);
@@ -124,31 +128,31 @@ export default function RootNav({navigation}: any) {
         // }}
       />
       <CurvedBottomBarExpo.Screen
-        name="Search"
-        component={() => <SearchScreen refTabBar={ref} />}
+        name="SearchNavigation"
+        component={() => <SearchNavigation />}
         position="LEFT"
         options={{}}
       />
       <CurvedBottomBarExpo.Screen
         name="History"
         position="RIGHT"
-        component={() => <HistoryScreen refTabBar={ref} />}
+        component={() => <HistoryNavigation />}
         options={{}}
       />
       <CurvedBottomBarExpo.Screen
         name="Setting"
         position="RIGHT"
-        component={() => <SettingScreen refTabBar={ref} />}
+        component={() => <SettingNavigation />}
         options={{}}
       />
-      <CurvedBottomBarExpo.Screen
+      {/* <CurvedBottomBarExpo.Screen
         name="Camera"
         position="CENTER"
         component={() => <CameraScreen refTabBar={ref} />}
         options={{
           tabBarStyle: {display: 'none'},
         }}
-      />
+      /> */}
     </CurvedBottomBarExpo.Navigator>
   );
 }

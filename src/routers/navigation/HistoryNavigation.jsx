@@ -3,10 +3,12 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HistoryScreen from '../../screens/HistoryScreen';
 
+const Stack = createNativeStackNavigator(); 
 const HistoryNavigation = () => {
-  const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+    }}>
       <Stack.Screen name="Album" component={HistoryScreen} />
     </Stack.Navigator>
   );

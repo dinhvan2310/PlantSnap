@@ -15,6 +15,10 @@ import HistoryScreen from '../screens/HistoryScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SettingScreen from '../screens/SettingScreen';
+import HomeNavigation from './navigation/HomeNavigation';
+import SearchNavigation from './navigation/SearchNavigation';
+import HistoryNavigation from './navigation/HistoryNavigation';
+import SettingNavigation from './navigation/SettingNavigation';
 
 const Tab = createBottomTabNavigator();
 export default function RootNav2({navigation}: any) {
@@ -66,8 +70,8 @@ export default function RootNav2({navigation}: any) {
             );
           },
         }}
-        name="Home"
-        component={HomeScreen}
+        name="HomeNavigation"
+        component={HomeNavigation}
       />
       <Tab.Screen
         options={{
@@ -80,8 +84,8 @@ export default function RootNav2({navigation}: any) {
             );
           },
         }}
-        name="Search"
-        component={SearchScreen}
+        name="SearchNavigation"
+        component={SearchNavigation}
       />
       <Tab.Screen
         options={{
@@ -99,7 +103,7 @@ export default function RootNav2({navigation}: any) {
             );
           },
         }}
-        name="Camera"
+        name="CameraNavigation"
         component={CameraScreen}
       />
       <Tab.Screen
@@ -110,8 +114,8 @@ export default function RootNav2({navigation}: any) {
             );
           },
         }}
-        name="History"
-        component={HistoryScreen}
+        name="HistoryNavigation"
+        component={HistoryNavigation}
       />
       <Tab.Screen
         options={{
@@ -124,8 +128,8 @@ export default function RootNav2({navigation}: any) {
             );
           },
         }}
-        name="Setting"
-        component={SettingScreen}
+        name="SettingNavigation"
+        component={SettingNavigation}
       />
     </Tab.Navigator>
   );

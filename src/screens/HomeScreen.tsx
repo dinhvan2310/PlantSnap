@@ -1,4 +1,4 @@
-import {View, Text, Image, StatusBar} from 'react-native';
+import {View, Text, Image, StatusBar, Alert} from 'react-native';
 import React, {useEffect} from 'react';
 import Container from '../components/Container';
 import TitleComponent from '../components/TitleComponent';
@@ -11,24 +11,44 @@ import {colors} from '../constants/colors';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 
-interface HomeScreenProps {
-  refTabBar: any;
-}
-
-const HomeScreen = (props: HomeScreenProps) => {
+const HomeScreen = () => {
   const navigation = useNavigation();
-  const {refTabBar} = props;
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', e => {
-      StatusBar.setBackgroundColor('transparent');
-      if (refTabBar) {
-        refTabBar.current.setVisible(true);
-      }
-      // ...
-    });
 
-    return unsubscribe;
-  }, [navigation]);
+  const user = auth().currentUser;
+
+  const [text, setText] = React.useState('');
+  const hasUnsavedChanges = Boolean(text);
+
+  React.useEffect(
+    () =>
+      navigation.addListener('beforeRemove', e => {
+        if (!hasUnsavedChanges) {
+          // If we don't have unsaved changes, then we don't need to do anything
+          return;
+        }
+
+        // Prevent default behavior of leaving the screen
+        e.preventDefault();
+
+        // Prompt the user before leaving the screen
+        Alert.alert(
+          'Discard changes?',
+          'You have unsaved changes. Are you sure to discard them and leave the screen?',
+          [
+            {text: "Don't leave", style: 'cancel', onPress: () => {}},
+            {
+              text: 'Discard',
+              style: 'destructive',
+              // If the user confirmed, then we dispatch the action we blocked earlier
+              // This will continue the action that had triggered the removal of the screen
+              onPress: () => navigation.dispatch(e.data.action),
+            },
+          ],
+        );
+      }),
+    [navigation, hasUnsavedChanges],
+  );
+
   return (
     <Container>
       <SectionComponent>
@@ -39,7 +59,11 @@ const HomeScreen = (props: HomeScreenProps) => {
           }}>
           <RowComponent>
             <Image
-              source={require('../assets/images/avatar.jpg')}
+              source={{
+                uri:
+                  user?.photoURL ||
+                  'https://cdn4.iconfinder.com/data/icons/music-ui-solid-24px/24/user_account_profile-2-512.png',
+              }}
               style={{width: 48, height: 48, borderRadius: 100}}
             />
             <View>
@@ -57,7 +81,7 @@ const HomeScreen = (props: HomeScreenProps) => {
                   fontWeight: '700',
                   lineHeight: 24,
                 }}
-                text="Phương Thảo"
+                text={user?.displayName}
                 size={22}
               />
             </View>

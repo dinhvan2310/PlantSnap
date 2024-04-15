@@ -8,26 +8,10 @@ import RowComponent from '../components/RowComponent';
 import SectionComponent from '../components/SectionComponent';
 import SpaceComponent from '../components/SpaceComponent';
 import {colors} from '../constants/colors';
-import {StatusBar} from 'react-native';
 
-interface SearchScreenProps {
-  refTabBar: any;
-}
-
-const SearchScreen = (props: SearchScreenProps) => {
+const SearchScreen = () => {
   const navigation = useNavigation();
-  const {refTabBar} = props;
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', e => {
-      StatusBar.setBackgroundColor('transparent');
-      if (refTabBar) {
-        refTabBar.current.setVisible(true);
-      }
-      // ...
-    });
 
-    return unsubscribe;
-  }, [navigation]);
   return (
     <Container isScroll={false}>
       <SectionComponent>
@@ -50,10 +34,13 @@ const SearchScreen = (props: SearchScreenProps) => {
           <RowComponent>
             <CardComponent
               type="small"
-              title="Monstera"
+              title="123"
               desc="This is a description"
               // image={require('../assets/images/plant1.png')}
               bookmark={true}
+              onPress={() => {
+                navigation.navigate('DetailPlant' as never);
+              }}
             />
             <SpaceComponent width={16} />
             <CardComponent
@@ -65,120 +52,7 @@ const SearchScreen = (props: SearchScreenProps) => {
             />
           </RowComponent>
         </SectionComponent>
-        <SectionComponent>
-          <RowComponent>
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-            <SpaceComponent width={16} />
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-          </RowComponent>
-        </SectionComponent>
-        <SectionComponent>
-          <RowComponent>
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-            <SpaceComponent width={16} />
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-          </RowComponent>
-        </SectionComponent>
-        <SectionComponent>
-          <RowComponent>
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-            <SpaceComponent width={16} />
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-          </RowComponent>
-        </SectionComponent>
-        <SectionComponent>
-          <RowComponent>
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-            <SpaceComponent width={16} />
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-          </RowComponent>
-        </SectionComponent>
-        <SectionComponent>
-          <RowComponent>
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-            <SpaceComponent width={16} />
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-          </RowComponent>
-        </SectionComponent>
-        <SectionComponent>
-          <RowComponent>
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-            <SpaceComponent width={16} />
-            <CardComponent
-              type="small"
-              title="Monstera"
-              desc="This is a description"
-              // image={require('../assets/images/plant1.png')}
-              bookmark={true}
-            />
-          </RowComponent>
-        </SectionComponent>
+
         <SpaceComponent height={64} />
       </Container>
     </Container>

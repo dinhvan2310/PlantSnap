@@ -1,7 +1,8 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {StatusBar, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+// import {Provider} from 'react-redux';
+// import store from './store';
 import AppNav from './src/routers/AppNav';
 
 export default function App() {
@@ -17,7 +18,9 @@ export default function App() {
         barStyle={'light-content'}
       />
       <NavigationContainer>
+        {/* <Provider store={store}> */}
         <AppNav />
+        {/* </Provider> */}
       </NavigationContainer>
     </View>
   );

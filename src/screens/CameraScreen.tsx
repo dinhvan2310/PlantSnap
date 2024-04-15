@@ -1,6 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {Crop, Flash, FlashSlash, Gallery} from 'iconsax-react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   AnimatableStringValue,
   StatusBar,
@@ -16,6 +16,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconEntypo from 'react-native-vector-icons/Entypo';
+import storage from '@react-native-firebase/storage';
 import {
   Camera,
   Templates,
@@ -27,15 +28,16 @@ import RowComponent from '../components/RowComponent';
 import SpaceComponent from '../components/SpaceComponent';
 import convertHexToRGBA from '../utils/convertHexToRGBA';
 import {launchImageLibrary} from 'react-native-image-picker';
-interface CameraScreenProps {
-  refTabBar: any;
-}
 
-const CameraScreen = (props: CameraScreenProps) => {
+// interface CameraScreenProps {
+//   refTabBar: any;
+// }
+
+const CameraScreen = () => {
   const {hasPermission, requestPermission} = useCameraPermission();
 
-  const navigation = useNavigation();
-  const {refTabBar} = props;
+  // const navigation = useNavigation();
+  // const {refTabBar} = props;
 
   const rotate = useSharedValue<AnimatableStringValue>('0deg');
   const animatedRotateStyles = useAnimatedStyle(() => ({
@@ -43,19 +45,28 @@ const CameraScreen = (props: CameraScreenProps) => {
   }));
 
   const [isflash, setFlash] = React.useState<boolean>(false);
-  const [isback, setBack] = React.useState<boolean>(true);
   const cameraRef = React.useRef<Camera>(null);
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', e => {
-      StatusBar.setBackgroundColor(convertHexToRGBA('#000', 0.2));
-      if (refTabBar) {
-        refTabBar.current.setVisible(false);
-      }
-    });
+  const [activeCamera, setActiveCamera] = useState<'front' | 'back'>('back');
 
-    return unsubscribe;
-  }, [navigation]);
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setActiveCamera('back');
+      };
+    }, []),
+  );
+
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', e => {
+  //     StatusBar.setBackgroundColor(convertHexToRGBA('#000', 0.2));
+  //     if (refTabBar) {
+  //       refTabBar.current.setVisible(false);
+  //     }
+  //   });
+
+  //   return unsubscribe;
+  // }, [navigation]);
 
   React.useEffect(() => {
     if (!hasPermission) {
@@ -69,7 +80,7 @@ const CameraScreen = (props: CameraScreenProps) => {
     }
   }, [hasPermission, requestPermission]);
 
-  const device = useCameraDevice(isback ? 'back' : 'front');
+  const device = useCameraDevice(activeCamera);
   const format = useCameraFormat(device, Templates.Photo);
 
   if (!device) {
@@ -147,24 +158,37 @@ const CameraScreen = (props: CameraScreenProps) => {
           onPress={async () => {
             const result = await launchImageLibrary({
               mediaType: 'photo',
-              includeBase64: false,
-              maxHeight: 200,
-              maxWidth: 200,
+              // includeBase64: false,
+              // maxHeight: 200,
+              // maxWidth: 200,
             });
+            console.log(result);
           }}>
           <Gallery size="32" color="#fff" />
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => {
-            cameraRef.current
-              ?.takePhoto({
-                flash: isflash ? 'on' : 'off',
-                enableShutterSound: false,
-              })
-              .then(photo => {
-                console.log(photo);
-              });
+          onPress={async () => {
+            const photo = await cameraRef.current?.takePhoto({
+              enableShutterSound: false,
+              flash: isflash ? 'on' : 'off',
+            });
+            console.log(photo);
+            const storageRef = storage().ref(
+              `photos/${new Date().getTime()}.jpg`,
+            );
+            if (!photo) {
+              return;
+            }
+            const task = storageRef.putFile(photo.path);
+            task.on('state_changed', snapshot => {
+              console.log(
+                `${snapshot.bytesTransferred} transferred out of ${snapshot.totalBytes}`,
+              );
+            });
+            await task;
+            const url = await storageRef.getDownloadURL();
+            console.log(url);
           }}
           style={{
             height: 64,
@@ -176,7 +200,7 @@ const CameraScreen = (props: CameraScreenProps) => {
         <Animated.View style={[animatedRotateStyles]}>
           <TouchableOpacity
             onPress={() => {
-              setBack(!isback);
+              setActiveCamera(activeCamera === 'back' ? 'front' : 'back');
               console.log(rotate.value);
               rotate.value = withSpring(
                 rotate.value === '0deg' ? '180deg' : '0deg',
