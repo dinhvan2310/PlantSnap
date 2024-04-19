@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {ActivityIndicator, Text, TouchableOpacity} from 'react-native';
+import {
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 import {colors} from '../constants/colors';
 import SpaceComponent from './SpaceComponent';
 import convertHexToRGBA from '../utils/convertHexToRGBA';
@@ -9,7 +14,7 @@ interface ButtonComponentProps {
   text: string;
   onPress?: () => void;
   icon?: React.ReactNode;
-  buttonStyle?: object;
+  buttonStyle?: ViewStyle;
   textStyle?: object;
   backgroundColor?: string;
   textColor?: string;

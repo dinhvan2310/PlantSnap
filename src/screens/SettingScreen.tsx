@@ -1,35 +1,48 @@
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import {useFocusEffect} from '@react-navigation/native';
-import React, {useCallback} from 'react';
-import {StatusBar, View} from 'react-native';
-import ButtonComponent from '../components/ButtonComponent';
+import {View, Text} from 'react-native';
+import React from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
 import Container from '../components/Container';
+import ButtonComponent from '../components/ButtonComponent';
 import SectionComponent from '../components/SectionComponent';
-import TitleComponent from '../components/TitleComponent';
 
 const SettingScreen = () => {
-  useFocusEffect(
-    useCallback(() => {
-      StatusBar.setBackgroundColor('rgba(0,0,0,0)');
-      StatusBar.setBarStyle('dark-content');
-    }, []),
-  );
-  const user = auth().currentUser;
-  if (!user) {
-    throw new Error('User not found');
-  }
-
   return (
     <Container>
-      <View
-        style={{
+      <SectionComponent
+        styles={{
           flex: 1,
         }}>
-        <SectionComponent>
-          <TitleComponent title="Setting" />
-        </SectionComponent>
-      </View>
+        <ButtonComponent
+          buttonStyle={{}}
+          text="Select Image"
+          onPress={() =>
+            ImagePicker.openPicker({
+              cropping: true,
+            }).then(image => {
+              console.log(image);
+            })
+          }
+        />
+      </SectionComponent>
+      <SectionComponent
+        styles={{
+          flex: 1,
+        }}>
+        <ButtonComponent
+          buttonStyle={{}}
+          text="Take Image"
+          onPress={() =>
+            ImagePicker.openCamera({
+              cropperToolbarTitle: 'Dectect Plant',
+              useFrontCamera: false,
+              freeStyleCropEnabled: true,
+              cropping: true,
+            }).then(image => {
+              console.log(image);
+            })
+          }
+        />
+      </SectionComponent>
     </Container>
   );
 };

@@ -1,9 +1,10 @@
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
 import storage from '@react-native-firebase/storage';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Crop, Flash, FlashSlash, Gallery} from 'iconsax-react-native';
 import Lottie from 'lottie-react-native';
-import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {
   default as React,
   useCallback,
@@ -21,6 +22,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import {
   ImagePickerResponse,
   launchImageLibrary,
@@ -34,21 +36,20 @@ import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconEntypo from 'react-native-vector-icons/Entypo';
 import {
   Camera,
-  Templates,
   useCameraDevice,
   useCameraFormat,
   useCameraPermission,
 } from 'react-native-vision-camera';
+import {addPlantHistory, savePlantImage} from '../api/FirebaseService';
+import {plantDetect} from '../api/LeafClassification';
 import DescComponent from '../components/DescComponent';
 import RowComponent from '../components/RowComponent';
 import SectionComponent from '../components/SectionComponent';
 import SpaceComponent from '../components/SpaceComponent';
 import TitleComponent from '../components/TitleComponent';
-import {addPlantHistory, savePlantImage} from '../api/FirebaseService';
-import {plantDetect} from '../api/LeafClassification';
-import ButtonComponent from '../components/ButtonComponent';
 import {resizeImageWithAspectRatio} from '../utils/resizeImage';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import convertHexToRGBA from '../utils/convertHexToRGBA';
 
 const CameraScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -136,13 +137,25 @@ const CameraScreen = () => {
       enableShutterSound: false,
       qualityPrioritization: 'speed',
     });
-    console.log(result?.height, result?.width);
+
     if (result) {
-      const url = await savePlantImage(result.path);
-      const rs = await plantDetect(url);
-      setPlant(rs);
-      handleSnapPress(0);
-      addPlantHistory(rs);
+      try {
+        const resultCrop = await ImageCropPicker.openCropper({
+          mediaType: 'photo',
+          path: 'file://' + result.path,
+          freeStyleCropEnabled: true,
+          cropping: true,
+          cropperToolbarTitle: 'Crop Plant Image',
+        });
+
+        const url = await savePlantImage(resultCrop.path);
+        const rs = await plantDetect(url);
+        setPlant(rs);
+        handleSnapPress(0);
+        addPlantHistory(rs);
+      } catch (e) {
+        console.log(e);
+      }
     }
     setLoading(false);
   };
@@ -156,8 +169,6 @@ const CameraScreen = () => {
     if (result.didCancel) {
       return;
     }
-
-    const storageRef = storage().ref(`photos/${new Date().getTime()}.jpg`);
     if (result?.assets === undefined) {
       return;
     }
@@ -166,62 +177,46 @@ const CameraScreen = () => {
       return;
     }
 
-    const fileSize = result.assets[0]?.fileSize as number;
-    if (fileSize >= 208962) {
-      console.log(
-        'Image size too large',
-        fileSize,
-        result.assets[0]?.width,
-        result.assets[0]?.height,
-      );
-      result.assets[0]?.fileSize;
+    try {
+      // check image size and resize if needed
+      const fileSize = result.assets[0]?.fileSize as number;
+      let resultResize;
+      if (fileSize >= 208962) {
+        console.log('Image size is too large, resizing...');
+        const width = result.assets[0]?.width as number;
+        const height = result.assets[0]?.height as number;
+        const {newWidth, newHeight} = resizeImageWithAspectRatio(
+          width,
+          height,
+          720,
+          1280,
+        );
+        resultResize = await ImageResizer.createResizedImage(
+          result.assets[0]?.uri as string,
+          newWidth,
+          newHeight,
+          'JPEG',
+          100,
+        );
+      }
 
-      const width = result.assets[0]?.width as number;
-      const height = result.assets[0]?.height as number;
+      const resultCrop = await ImagePicker.openCropper({
+        path: resultResize?.uri || (result.assets[0]?.uri as string),
+        mediaType: 'photo',
+        freeStyleCropEnabled: true,
+        cropping: true,
+        cropperToolbarTitle: 'Crop Plant Image',
+      });
 
-      const {newWidth, newHeight} = resizeImageWithAspectRatio(
-        width,
-        height,
-        720,
-        1280,
-      );
-
-      console.log('Resizing image', newWidth, newHeight);
-
-      ImageResizer.createResizedImage(
-        result.assets[0]?.uri as string,
-        newWidth,
-        newHeight,
-        'JPEG',
-        100,
-      )
-        .then(response => {
-          // response.uri is the URI of the new image that can now be displayed, uploaded...
-          // response.path is the path of the new image
-          // response.name is the name of the new image with the extension
-          // response.size is the size of the new image
-          const rs = plantDetect(response.uri).then(rs => {
-            setPlant(rs);
-            handleSnapPress(0);
-            addPlantHistory(rs);
-          });
-        })
-        .catch(err => {
-          // Oops, something went wrong. Check that the filename is correct and
-          // inspect err to get more details.
-          console.log(err);
+      savePlantImage(resultCrop.path).then(url => {
+        const rs = plantDetect(url).then(rs => {
+          setPlant(rs);
+          handleSnapPress(0);
+          addPlantHistory(rs);
         });
-    } else {
-      console.log(
-        'Image size is good',
-        result.assets[0]?.width,
-        result.assets[0]?.height,
-      );
-      const url = await savePlantImage(result.assets[0]?.uri as string);
-      const rs = await plantDetect(url);
-      setPlant(rs);
-      handleSnapPress(0);
-      addPlantHistory(rs);
+      });
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -334,9 +329,12 @@ const CameraScreen = () => {
             <SectionComponent>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.getParent()?.navigate('History', {
+                  navigation.getParent()?.navigate('HistoryNavigation', {
                     screen: 'DetailPlant',
-                    plant,
+                    params: {
+                      plant: plant,
+                    },
+                    initial: false,
                   });
                 }}>
                 <TitleComponent title={plant?.common_name} />

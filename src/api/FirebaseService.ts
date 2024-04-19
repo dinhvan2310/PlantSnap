@@ -64,8 +64,19 @@ export const removePlantHistory = async (plant: PlantDetectType) => {
                 history: firestore.FieldValue.arrayRemove(plant),
             }).then(() => {
                 console.log('Plant history removed!');
+                
+                const storageRef = storage().refFromURL(plant.image_url);
+                if (storageRef) {
+                    storageRef.delete().then(() => {
+                        console.log('Plant image deleted!');
+                    }).catch((error) => {
+                        console.log('Error deleting plant image: ', error);
+                    });
+                }
+
             });
         }
+
     } catch (error) {
         throw error;
     }

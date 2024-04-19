@@ -27,6 +27,7 @@ const DetailPlantScreen = ({route, navigation}: any) => {
 
   const [plant, setPlant] = React.useState<PlantDetectType | null>(null);
   React.useEffect(() => {
+    console.log('route.params?.plant', route.params?.plant);
     setPlant(route.params?.plant);
   }, [route, navigation]);
 
