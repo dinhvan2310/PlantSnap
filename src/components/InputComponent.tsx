@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {TextInput, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {colors} from '../constants/colors';
 import SpaceComponent from './SpaceComponent';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 interface InputComponentProps {
   placeholder?: string;
@@ -12,11 +13,12 @@ interface InputComponentProps {
   isPassword?: boolean;
   styles?: ViewStyle;
   icon?: React.ReactNode;
+  clear?: boolean;
 }
 
 const InputComponent = ({
   placeholder,
-
+  clear,
   onChange,
   value,
   keyboardType,
@@ -33,7 +35,7 @@ const InputComponent = ({
           backgroundColor: colors.secondary,
           borderRadius: 14,
           paddingHorizontal: 24,
-          paddingVertical: 18,
+          paddingVertical: 12,
           flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
@@ -68,6 +70,15 @@ const InputComponent = ({
           ) : (
             <Eye size={24} color={colors.primary} />
           )}
+        </TouchableOpacity>
+      )}
+      {clear && value && (
+        <TouchableOpacity
+          onPress={() => onChange('')}
+          style={{
+            justifyContent: 'center',
+          }}>
+          <MaterialIcons name="clear" size={24} color={colors.gray} />
         </TouchableOpacity>
       )}
     </View>

@@ -59,6 +59,7 @@ const ButtonComponent = (props: ButtonComponentProps) => {
                 fontSize: 16,
                 fontWeight: 500,
                 textAlign: 'center',
+                flex: 1,
               },
               textStyle,
             ]}>
@@ -68,17 +69,6 @@ const ButtonComponent = (props: ButtonComponentProps) => {
       )}
     </TouchableOpacity>
   );
-};
-
-ButtonComponent.propTypes = {
-  text: PropTypes.string.isRequired,
-  onPress: PropTypes.func,
-  icon: PropTypes.node,
-  buttonStyle: PropTypes.object,
-  textStyle: PropTypes.object,
-  backgroundColor: PropTypes.string,
-  textColor: PropTypes.string,
-  isLoading: PropTypes.bool,
 };
 
 export default ButtonComponent;

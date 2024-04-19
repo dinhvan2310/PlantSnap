@@ -8,4 +8,5 @@ export const colors = {
   title: '#2A4ECA',
   decs: '#61677D',
   placeholder: '#7C8BA0',
+  red: '#e74c3c'
 };

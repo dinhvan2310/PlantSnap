@@ -3,7 +3,7 @@ import {Text} from 'react-native';
 import {colors} from '../constants/colors';
 
 interface TitleComponentProps {
-  title: string;
+  title: string | number | undefined | null;
   color?: string;
   size?: number;
   fontFamily?: string;

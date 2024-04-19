@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, TouchableOpacity, View} from 'react-native';
+import {Image, TouchableOpacity, View, ViewStyle} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {colors} from '../constants/colors';
 import DescComponent from './DescComponent';
@@ -13,34 +13,42 @@ interface CardComponentProps {
   desc: string;
   time?: string;
   type: 'small' | 'large';
-  image?: string;
+  image: string;
   bookmark?: boolean;
   onPress?: () => void;
+  styles?: ViewStyle;
 }
 
-const CardComponent = (props: CardComponentProps) => {
-  const {title, desc, image, bookmark, onPress, time, type} = props;
+const NOTFOUNDIMAGE =
+  'https://static.vecteezy.com/system/resources/previews/005/337/799/non_2x/icon-image-not-found-free-vector.jpg';
 
+const CardComponent = (props: CardComponentProps) => {
+  const {title, desc, image, bookmark, onPress, time, type, styles} = props;
   if (type === 'small') {
     return (
       <TouchableOpacity
         onPress={onPress}
-        style={{
-          flex: 1,
-          borderRadius: 12,
-          height: 154,
-          backgroundColor: colors.white,
-          shadowColor: '#000000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
+        style={[
+          {
+            flex: 1,
+            borderRadius: 12,
+            height: 154,
+            backgroundColor: colors.white,
+            shadowColor: '#000000',
+            shadowOffset: {
+              width: 0,
+              height: 1,
+            },
+            shadowOpacity: 0.16,
+            shadowRadius: 1.51,
+            elevation: 2,
           },
-          shadowOpacity: 0.16,
-          shadowRadius: 1.51,
-          elevation: 2,
-        }}>
+          styles,
+        ]}>
         <Image
-          source={require('../assets/images/image4.jpg')} // Change this line
+          source={{
+            uri: image ?? NOTFOUNDIMAGE,
+          }} // Change this line
           style={{
             height: 94,
             width: '100%',
@@ -103,7 +111,9 @@ const CardComponent = (props: CardComponentProps) => {
         }}>
         <RowComponent styles={{}}>
           <Image
-            source={require('../assets/images/image4.jpg')} // Change this line
+            source={{
+              uri: image ?? NOTFOUNDIMAGE,
+            }} // Change this line
             style={{
               height: 97,
               width: 97,

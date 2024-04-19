@@ -1,35 +1,36 @@
-import {View, Text, TouchableOpacity, StatusBar} from 'react-native';
-import React from 'react';
-import {setItem} from '../utils/asyncStorage';
-import {onSignOutPress} from '../auth/authContext';
-import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import {useFocusEffect} from '@react-navigation/native';
+import React, {useCallback} from 'react';
+import {StatusBar, View} from 'react-native';
+import ButtonComponent from '../components/ButtonComponent';
+import Container from '../components/Container';
+import SectionComponent from '../components/SectionComponent';
+import TitleComponent from '../components/TitleComponent';
 
-interface SettingScreenProps {
-  refTabBar: any;
-}
+const SettingScreen = () => {
+  useFocusEffect(
+    useCallback(() => {
+      StatusBar.setBackgroundColor('rgba(0,0,0,0)');
+      StatusBar.setBarStyle('dark-content');
+    }, []),
+  );
+  const user = auth().currentUser;
+  if (!user) {
+    throw new Error('User not found');
+  }
 
-const SettingScreen = (props: SettingScreenProps) => {
-  // const navigation = useNavigation();
-  // const {refTabBar} = props;
-  // React.useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', e => {
-  //     StatusBar.setBackgroundColor('transparent');
-  //     if (refTabBar) {
-  //       refTabBar.current.setVisible(true);
-  //     }
-  //     // ...
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
   return (
-    <View>
-      <TouchableOpacity
-        onPress={() => setItem('onboarding', 'true')}
-        onPressIn={onSignOutPress}>
-        <Text>Sign out</Text>
-      </TouchableOpacity>
-    </View>
+    <Container>
+      <View
+        style={{
+          flex: 1,
+        }}>
+        <SectionComponent>
+          <TitleComponent title="Setting" />
+        </SectionComponent>
+      </View>
+    </Container>
   );
 };
 

@@ -1,9 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import SearchScreen from '../../screens/SearchScreen';
 import DetailPlantScreen from '../../screens/DetailPlantScreen';
-import {useNavigation} from '@react-navigation/native';
-import {StatusBar} from 'react-native';
+import SearchScreen from '../../screens/SearchScreen';
 
 interface SearchNavigationProps {
   refTabBar: any;
@@ -33,11 +31,7 @@ const SearchNavigation = () => {
       }}>
       <Stack.Screen options={{}} name="Search" component={SearchScreen} />
       <Stack.Screen
-        options={
-          {
-            // headerShown: true,
-          }
-        }
+        options={{}}
         name="DetailPlant"
         component={DetailPlantScreen}
       />

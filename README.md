@@ -32,3 +32,11 @@ PlanSnap là một ứng dụng di động giúp người dùng nhận diện v�
 
 
 set(ENABLE_FRAME_PROCESSORS ON)
+
+
+# Path: README.md
+
+- Bottom sheet for plant information on camera screen: bug, need to fix
+  - first time task photo, bottom sheet is not displayed correctly
+  - if task photo is taken again, bottom sheet is displayed correctly
+  - add icon loading for image processing

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {ScrollView, Text, TouchableOpacity} from 'react-native';
 import ButtonComponent from '../components/ButtonComponent';
 import CheckboxComponent from '../components/CheckboxComponent';
 import Container from '../components/Container';
@@ -73,133 +73,135 @@ const SignUpScreen = (props: SignUpScreenProps) => {
 
   return (
     <Container>
-      <SectionComponent
-        styles={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <TitleComponent title="Sign Up" />
-      </SectionComponent>
-      <SectionComponent
-        styles={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <DescComponent text="It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum." />
-      </SectionComponent>
-
-      <SectionComponent>
-        <RowComponent
+      <ScrollView>
+        <SectionComponent
           styles={{
-            marginTop: 16,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
+          <TitleComponent title="Sign Up" />
+        </SectionComponent>
+        <SectionComponent
+          styles={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <DescComponent text="It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum." />
+        </SectionComponent>
+
+        <SectionComponent>
+          <RowComponent
+            styles={{
+              marginTop: 16,
+            }}>
+            <ButtonComponent
+              text="Facebook"
+              textStyle={{
+                fontFamily: 'Medium',
+              }}
+              icon={<Facebook size={24} color={'#1877F2'} />}
+              onPress={() => {
+                onFacebookButtonPress().then(() => {
+                  console.log('Facebook sign-in successful');
+                });
+              }}
+            />
+            <SpaceComponent width={16} />
+            <ButtonComponent
+              text="Google"
+              textStyle={{
+                fontFamily: 'Medium',
+              }}
+              icon={<Google size={24} color={'#DB4437'} />}
+              onPress={() => {
+                onGoogleButtonPress().then(() => {
+                  console.log('Google sign-in successful');
+                });
+              }}
+            />
+          </RowComponent>
+        </SectionComponent>
+        <SectionComponent>
+          <HorizontalRuleComponent text={'Or'} />
+        </SectionComponent>
+        <SectionComponent>
+          <SectionComponent>
+            <InputComponent
+              placeholder={'Full Name'}
+              value={fullName}
+              onChange={val => {
+                setFullName(val);
+                setErrorText('');
+              }}
+            />
+          </SectionComponent>
+          <SectionComponent>
+            <InputComponent
+              placeholder={'Email'}
+              keyboardType={'email-address'}
+              value={email}
+              onChange={val => {
+                setEmail(val);
+                setErrorText('');
+              }}
+            />
+          </SectionComponent>
+          <SectionComponent>
+            <InputComponent
+              placeholder={'Password'}
+              isPassword={true}
+              value={password}
+              onChange={val => {
+                setPassword(val);
+                setErrorText('');
+              }}
+            />
+          </SectionComponent>
+          <SectionComponent>
+            <InputComponent
+              placeholder={'Confirm Password'}
+              isPassword={true}
+              value={confirmPassword}
+              onChange={val => {
+                setConfirmPassword(val);
+                setErrorText('');
+              }}
+            />
+          </SectionComponent>
+          <SectionComponent>
+            <CheckboxComponent
+              onPress={() => {
+                setIsAccessToService(!isAccessToService);
+                setErrorText('');
+              }}
+              text="I’m agree to The Tarms of Service and Privasy Policy"
+            />
+          </SectionComponent>
+        </SectionComponent>
+        <SectionComponent>
+          {errorText ? (
+            <Text style={{color: 'red', marginBottom: 10}}>{errorText}</Text>
+          ) : null}
+        </SectionComponent>
+        <SectionComponent>
           <ButtonComponent
-            text="Facebook"
+            isLoading={isLoading}
+            text="Create Account"
             textStyle={{
               fontFamily: 'Medium',
             }}
-            icon={<Facebook size={24} color={'#1877F2'} />}
-            onPress={() => {
-              onFacebookButtonPress().then(() => {
-                console.log('Facebook sign-in successful');
-              });
-            }}
-          />
-          <SpaceComponent width={16} />
-          <ButtonComponent
-            text="Google"
-            textStyle={{
-              fontFamily: 'Medium',
-            }}
-            icon={<Google size={24} color={'#DB4437'} />}
-            onPress={() => {
-              onGoogleButtonPress().then(() => {
-                console.log('Google sign-in successful');
-              });
-            }}
-          />
-        </RowComponent>
-      </SectionComponent>
-      <SectionComponent>
-        <HorizontalRuleComponent text={'Or'} />
-      </SectionComponent>
-      <SectionComponent>
-        <SectionComponent>
-          <InputComponent
-            placeholder={'Full Name'}
-            value={fullName}
-            onChange={val => {
-              setFullName(val);
-              setErrorText('');
-            }}
+            onPress={handleCreateAccount}
           />
         </SectionComponent>
         <SectionComponent>
-          <InputComponent
-            placeholder={'Email'}
-            keyboardType={'email-address'}
-            value={email}
-            onChange={val => {
-              setEmail(val);
-              setErrorText('');
-            }}
-          />
+          <RowComponent>
+            <DescComponent text="Do you have account? " />
+            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+              <DescComponent text="Sign In" color={colors.primary} />
+            </TouchableOpacity>
+          </RowComponent>
         </SectionComponent>
-        <SectionComponent>
-          <InputComponent
-            placeholder={'Password'}
-            isPassword={true}
-            value={password}
-            onChange={val => {
-              setPassword(val);
-              setErrorText('');
-            }}
-          />
-        </SectionComponent>
-        <SectionComponent>
-          <InputComponent
-            placeholder={'Confirm Password'}
-            isPassword={true}
-            value={confirmPassword}
-            onChange={val => {
-              setConfirmPassword(val);
-              setErrorText('');
-            }}
-          />
-        </SectionComponent>
-        <SectionComponent>
-          <CheckboxComponent
-            onPress={() => {
-              setIsAccessToService(!isAccessToService);
-              setErrorText('');
-            }}
-            text="I’m agree to The Tarms of Service and Privasy Policy"
-          />
-        </SectionComponent>
-      </SectionComponent>
-      <SectionComponent>
-        {errorText ? (
-          <Text style={{color: 'red', marginBottom: 10}}>{errorText}</Text>
-        ) : null}
-      </SectionComponent>
-      <SectionComponent>
-        <ButtonComponent
-          isLoading={isLoading}
-          text="Create Account"
-          textStyle={{
-            fontFamily: 'Medium',
-          }}
-          onPress={handleCreateAccount}
-        />
-      </SectionComponent>
-      <SectionComponent>
-        <RowComponent>
-          <DescComponent text="Do you have account? " />
-          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-            <DescComponent text="Sign In" color={colors.primary} />
-          </TouchableOpacity>
-        </RowComponent>
-      </SectionComponent>
+      </ScrollView>
     </Container>
   );
 };

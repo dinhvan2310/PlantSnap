@@ -26,7 +26,7 @@ const DescComponent = ({
           fontSize: size ?? 14,
           color: color ?? colors.decs,
           fontFamily: fontFamily ?? 'Regular',
-          lineHeight: 22,
+          lineHeight: lineHeight ?? 22,
         },
         style,
       ]}>

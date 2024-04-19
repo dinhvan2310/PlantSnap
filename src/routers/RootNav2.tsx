@@ -39,7 +39,7 @@ export default function RootNav2({navigation}: any) {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarHideOnKeyboard: true,
+        tabBarHideOnKeyboard: false,
         tabBarStyle: {
           backgroundColor: colors.white2,
           borderTopLeftRadius: 12,

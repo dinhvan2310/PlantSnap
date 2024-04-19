@@ -17,6 +17,7 @@ const SectionComponent = (props: SectionComponentProps) => {
         {
           marginBottom: marginBottom ?? 16,
           marginTop: marginTop ?? 0,
+          flex: 0,
         },
         styles,
       ]}>

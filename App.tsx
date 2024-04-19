@@ -4,6 +4,7 @@ import {StatusBar, View} from 'react-native';
 // import {Provider} from 'react-redux';
 // import store from './store';
 import AppNav from './src/routers/AppNav';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export default function App() {
   return (
@@ -12,16 +13,16 @@ export default function App() {
         flex: 1,
         backgroundColor: '#fff',
       }}>
-      <StatusBar
-        translucent
-        backgroundColor={'transparent'}
-        barStyle={'light-content'}
-      />
-      <NavigationContainer>
-        {/* <Provider store={store}> */}
-        <AppNav />
-        {/* </Provider> */}
-      </NavigationContainer>
+      <GestureHandlerRootView>
+        <StatusBar
+          translucent
+          backgroundColor={'transparent'}
+          barStyle={'light-content'}
+        />
+        <NavigationContainer>
+          <AppNav />
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </View>
   );
 }
