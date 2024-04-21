@@ -1,13 +1,13 @@
-import httpRequests from "./httpRequest";
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import { PlantHistoryType, PlantType } from '../types/plantType';
 
-export const savePlantImage = async (image: string) => {
+export const savePlantImage = async (image_url: string) => {
     const storageRef = storage().ref(
         `photos/${new Date().getTime()}.jpg`,
       );
-    const task = storageRef.putFile(image);
+    const task = storageRef.putFile(image_url);
     task.on('state_changed', snapshot => {
         console.log(
         `${snapshot.bytesTransferred} transferred out of ${snapshot.totalBytes}`,
@@ -18,8 +18,7 @@ export const savePlantImage = async (image: string) => {
 }
 
 
-
-export const addPlantHistory = async (plant: PlantDetectType) => {
+export const addPlantHistory = async (plant: PlantHistoryType) => {
     const user = auth().currentUser;
     if (!user) {
         throw new Error('User not found');
@@ -50,7 +49,7 @@ export const addPlantHistory = async (plant: PlantDetectType) => {
     }
 }
 
-export const removePlantHistory = async (plant: PlantDetectType) => {
+export const removePlantHistory = async (plant: PlantHistoryType) => {
     const user = auth().currentUser;
     if (!user) {
         throw new Error('User not found');
@@ -83,7 +82,7 @@ export const removePlantHistory = async (plant: PlantDetectType) => {
 
 }
 
-export const getPlantHistory = async () => {
+export const getPlantHistory = async (): Promise<PlantHistoryType[]> => {
     const user = auth().currentUser;
     if (!user) {
         throw new Error('User not found');
@@ -97,13 +96,13 @@ export const getPlantHistory = async () => {
         
             return history;
         }
-        return null;
+        return [];
     } catch (error) {
         throw error;
     }
 }
 
-export const realTimePlantHistory = async (callback: (data: PlantDetectType[]) => void) => {
+export const realTimePlantHistory = async (callback: (data: PlantHistoryType[]) => void) => {
     const user = auth().currentUser;
     if (!user) {
         throw new Error('User not found');
@@ -113,7 +112,7 @@ export const realTimePlantHistory = async (callback: (data: PlantDetectType[]) =
         const plantRef = firestore().collection('history').doc(uid)
         plantRef.onSnapshot((doc) => {
             if (doc?.exists) {
-                const history: PlantDetectType[] = doc.data()?.history;
+                const history: PlantHistoryType[] = doc.data()?.history;
                 callback(history);
             }
         });

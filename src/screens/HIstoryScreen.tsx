@@ -16,9 +16,11 @@ import {convertTimestampToTimeAgo} from '../utils/timeAgo';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SwipeableFlatList from 'rn-gesture-swipeable-flatlist';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {PlantHistoryType, PlantType} from '../types/plantType';
+import {getPlantDirectory} from '../api/LeafClassification';
 
-const reverseData = (data: PlantDetectType[]) => {
-  return data.sort((a: PlantDetectType, b: PlantDetectType) => {
+const reverseData = (data: PlantHistoryType[]) => {
+  return data.sort((a: PlantHistoryType, b: PlantHistoryType) => {
     // Replace 'key' with the actual key you want to sort by
     const keyA = a.timestamp;
     const keyB = b.timestamp;
@@ -37,11 +39,13 @@ const HistoryScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const [searchInput, setSearchInput] = React.useState<string>('');
-  const [data, setData] = React.useState<PlantDetectType[] | undefined>([]);
-  const [filteredData, setFilteredData] = React.useState<
-    PlantDetectType[] | undefined
-  >([]);
+  const [plantDirectory, setPlantDirectory] = React.useState<PlantType[]>([]);
+  const [data, setData] = React.useState<PlantHistoryType[]>([]);
+  const [filteredData, setFilteredData] = React.useState<PlantHistoryType[]>(
+    [],
+  );
 
+  // set status bar
   useFocusEffect(
     useCallback(() => {
       StatusBar.setBackgroundColor('rgba(0,0,0,0)');
@@ -51,11 +55,15 @@ const HistoryScreen = () => {
     }, []),
   );
 
+  // get data from firebase
   useEffect(() => {
     const func = async () => {
       const initData = await getPlantHistory();
       setData(initData);
       setFilteredData(initData);
+
+      setPlantDirectory(await getPlantDirectory());
+
       realTimePlantHistory(data => {
         setData(reverseData(data));
         setFilteredData(reverseData(data));
@@ -68,13 +76,12 @@ const HistoryScreen = () => {
     if (searchInput === '') {
       setFilteredData(data);
     } else {
-      const filtered = data?.filter(
-        item =>
+      const filtered = data?.filter(item => {
+        return (
           item.common_name.toLowerCase().includes(searchInput.toLowerCase()) ||
-          item.scientific_name
-            .toLowerCase()
-            .includes(searchInput.toLowerCase()),
-      );
+          item.scientific_name.toLowerCase().includes(searchInput.toLowerCase())
+        );
+      });
       setFilteredData(filtered);
     }
   }, [searchInput]);
@@ -141,14 +148,17 @@ const HistoryScreen = () => {
           if (filteredData === null) {
             return <></>;
           }
-
           const marginbottom =
             index === (filteredData?.length ?? 0) - 1 ? 16 : 16;
           return (
             <SectionComponent marginBottom={marginbottom}>
               <CardComponent
                 onPress={() => {
-                  navigation.navigate('DetailPlant', {plant: item});
+                  navigation.navigate('DetailPlant', {
+                    plant: plantDirectory[item.plantid],
+                    history_plant_image: item.image_url,
+                    status: item.status,
+                  });
                 }}
                 title={item.common_name}
                 desc={item.scientific_name}

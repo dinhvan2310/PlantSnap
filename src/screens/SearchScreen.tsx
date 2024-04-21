@@ -3,19 +3,21 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SearchNormal} from 'iconsax-react-native';
 import React, {useCallback, useEffect} from 'react';
 import {FlatList, StatusBar} from 'react-native';
-import {plantDirectory} from '../api/LeafClassification';
+import {getPlantDirectory} from '../api/LeafClassification';
 import CardComponent from '../components/CardComponent';
 import Container from '../components/Container';
 import InputComponent from '../components/InputComponent';
 import SectionComponent from '../components/SectionComponent';
 import {colors} from '../constants/colors';
+import {PlantType} from '../types/plantType';
 
-const NOTFOUNDIMAGE =
+const NOTFOUND_IMAGE =
   'https://static.vecteezy.com/system/resources/previews/005/337/799/non_2x/icon-image-not-found-free-vector.jpg';
 
 const SearchScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
+  // set status bar
   useFocusEffect(
     useCallback(() => {
       StatusBar.setBackgroundColor('rgba(0,0,0,0)');
@@ -25,17 +27,17 @@ const SearchScreen = () => {
     }, []),
   );
 
-  const [data, setData] = React.useState<PlantDetectType[] | undefined>([]);
-  const [filteredData, setFilteredData] = React.useState<
-    PlantDetectType[] | undefined
-  >([]);
+  // state
+  const [data, setData] = React.useState<PlantType[]>([]);
+  const [filteredData, setFilteredData] = React.useState<PlantType[]>([]);
   const [searchInput, setSearchInput] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
 
+  // fetch data
   React.useEffect(() => {
     const func = async () => {
       // fetch data
-      const data = await plantDirectory();
+      const data = await getPlantDirectory();
       setFilteredData(data);
       setData(data);
     };
@@ -94,7 +96,7 @@ const SearchScreen = () => {
             <CardComponent
               title={item.common_name}
               desc={item.scientific_name}
-              image={item.image_url}
+              image={item.image_url[0] ?? NOTFOUND_IMAGE}
               bookmark={true}
               styles={{marginBottom: marginbottom}}
               type="small"

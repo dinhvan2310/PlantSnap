@@ -1,6 +1,5 @@
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
-import storage from '@react-native-firebase/storage';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Crop, Flash, FlashSlash, Gallery} from 'iconsax-react-native';
@@ -22,7 +21,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
+import {PlantHistoryType} from '../types/plantType';
+
+import {
+  default as ImageCropPicker,
+  default as ImagePicker,
+} from 'react-native-image-crop-picker';
 import {
   ImagePickerResponse,
   launchImageLibrary,
@@ -41,23 +45,32 @@ import {
   useCameraPermission,
 } from 'react-native-vision-camera';
 import {addPlantHistory, savePlantImage} from '../api/FirebaseService';
-import {plantDetect} from '../api/LeafClassification';
+import {detectPlant, getPlantDirectory} from '../api/LeafClassification';
 import DescComponent from '../components/DescComponent';
 import RowComponent from '../components/RowComponent';
 import SectionComponent from '../components/SectionComponent';
 import SpaceComponent from '../components/SpaceComponent';
 import TitleComponent from '../components/TitleComponent';
+import {PlantType} from '../types/plantType';
 import {resizeImageWithAspectRatio} from '../utils/resizeImage';
-import ImageCropPicker from 'react-native-image-crop-picker';
-import convertHexToRGBA from '../utils/convertHexToRGBA';
+import {colors} from '../constants/colors';
 
 const CameraScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   // *state
   const [isflash, setFlash] = React.useState<boolean>(false);
   const [activeCamera, setActiveCamera] = useState<'front' | 'back'>('back');
-  const [plant, setPlant] = useState<PlantDetectType | null>(null);
+  const [plantDetected, setPlantDetected] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [plantDirectory, setPlantDirectory] = useState<PlantType[]>([]);
+
+  useEffect(() => {
+    const fetchPlantDirectory = async () => {
+      const response = await getPlantDirectory();
+      setPlantDirectory(response);
+    };
+    fetchPlantDirectory();
+  }, []);
 
   // ?focus effect, reset camera to back when screen is unfocused, prevent bug
   useFocusEffect(
@@ -68,6 +81,7 @@ const CameraScreen = () => {
     }, []),
   );
 
+  // *status bar
   useFocusEffect(
     useCallback(() => {
       StatusBar.setBackgroundColor('rgba(0,0,0,0.3)');
@@ -109,9 +123,7 @@ const CameraScreen = () => {
 
   // *bottom sheet variables
   const snapPoints = useMemo(() => ['50%', '90%'], []);
-  const handleSheetChange = useCallback((index: number) => {
-    console.log('handleSheetChange', index);
-  }, []);
+  const handleSheetChange = useCallback((index: number) => {}, []);
   const handleSnapPress = useCallback((index: number) => {
     sheetRef.current?.snapToIndex(index);
   }, []);
@@ -127,7 +139,6 @@ const CameraScreen = () => {
   // Todo: Action
   const handleSwitchCamera = () => {
     setActiveCamera(activeCamera === 'back' ? 'front' : 'back');
-    console.log(rotate.value);
     rotate.value = withSpring(rotate.value === '0deg' ? '180deg' : '0deg');
   };
   const handleTaskPhoto = async () => {
@@ -149,16 +160,29 @@ const CameraScreen = () => {
         });
 
         const url = await savePlantImage(resultCrop.path);
-        const rs = await plantDetect(url);
-        setPlant(rs);
+        const {plantid, status} = await detectPlant(url);
+        setPlantDetected({
+          ...plantDirectory[plantid],
+          status: status,
+          image_url: [url],
+        });
         handleSnapPress(0);
-        addPlantHistory(rs);
+        addPlantHistory({
+          common_name: plantDirectory[plantid].common_name,
+          scientific_name: plantDirectory[plantid].scientific_name,
+          image_url: url,
+          plantid: plantid,
+          status: status,
+          timestamp: new Date().getTime(),
+        });
+        setLoading(false);
       } catch (e) {
+        setLoading(false);
         console.log(e);
       }
     }
-    setLoading(false);
   };
+
   const handleTaskPhotoFromGallery = async () => {
     const result: ImagePickerResponse = await launchImageLibrary({
       mediaType: 'photo',
@@ -177,6 +201,7 @@ const CameraScreen = () => {
       return;
     }
 
+    setLoading(true);
     try {
       // check image size and resize if needed
       const fileSize = result.assets[0]?.fileSize as number;
@@ -208,14 +233,26 @@ const CameraScreen = () => {
         cropperToolbarTitle: 'Crop Plant Image',
       });
 
-      savePlantImage(resultCrop.path).then(url => {
-        const rs = plantDetect(url).then(rs => {
-          setPlant(rs);
-          handleSnapPress(0);
-          addPlantHistory(rs);
-        });
+      const url = await savePlantImage(resultCrop.path);
+
+      const {plantid, status} = await detectPlant(url);
+      setPlantDetected({
+        ...plantDirectory[plantid],
+        status: status,
+        image_url: [url],
       });
+      handleSnapPress(0);
+      addPlantHistory({
+        common_name: plantDirectory[plantid].common_name,
+        scientific_name: plantDirectory[plantid].scientific_name,
+        image_url: url,
+        plantid: plantid,
+        status: status,
+        timestamp: new Date().getTime(),
+      });
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       console.log(e);
     }
   };
@@ -318,37 +355,47 @@ const CameraScreen = () => {
       </RowComponent>
 
       {/* bottom sheet component */}
-      {plant && (
+      {plantDetected && (
         <BottomSheet
           ref={sheetRef}
           enablePanDownToClose={true}
           snapPoints={snapPoints}
-          index={plant ? 0 : -1}
+          index={plantDetected ? 0 : -1}
           onChange={handleSheetChange}>
           <BottomSheetView>
             <SectionComponent>
               <TouchableOpacity
                 onPress={() => {
+                  console.log('navigate to detail plant', plantDetected);
                   navigation.getParent()?.navigate('HistoryNavigation', {
                     screen: 'DetailPlant',
                     params: {
-                      plant: plant,
+                      plant: plantDirectory[plantDetected?.id],
+                      status: plantDetected.status,
+                      history_plant_image: plantDetected.image_url[0],
                     },
                     initial: false,
                   });
                 }}>
-                <TitleComponent title={plant?.common_name} />
+                <TitleComponent title={plantDetected.common_name} />
               </TouchableOpacity>
-              <DescComponent text={plant?.scientific_name} />
+              <DescComponent text={plantDetected.scientific_name} />
+            </SectionComponent>
+            <SectionComponent>
+              <DescComponent text="Status" size={24} lineHeight={24} />
+              <DescComponent
+                text={plantDetected.status ? 'healthy' : 'unhealthy'}
+                color={colors.red}
+              />
             </SectionComponent>
             <SectionComponent>
               <DescComponent text="Description" size={24} lineHeight={24} />
-              <DescComponent text={plant?.description} />
+              <DescComponent text={plantDetected.description} />
             </SectionComponent>
             <SectionComponent>
               <Image
                 source={{
-                  uri: plant?.image_url as string,
+                  uri: plantDetected.image_url[0],
                 }}
                 style={{
                   width: '100%',

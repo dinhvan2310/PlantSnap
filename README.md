@@ -40,3 +40,6 @@ set(ENABLE_FRAME_PROCESSORS ON)
   - first time task photo, bottom sheet is not displayed correctly
   - if task photo is taken again, bottom sheet is displayed correctly
   - add icon loading for image processing
+
+
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
