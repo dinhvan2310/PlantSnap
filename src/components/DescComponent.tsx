@@ -19,6 +19,13 @@ const DescComponent = ({
   style,
   lineHeight,
 }: DescComponentProps) => {
+  const renderViewMore = (onPress: any) => (
+    <Text onPress={onPress}>View more</Text>
+  );
+  const renderViewLess = (onPress: any) => (
+    <Text onPress={onPress}>View less</Text>
+  );
+
   return (
     <Text
       style={[

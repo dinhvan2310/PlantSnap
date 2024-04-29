@@ -1,5 +1,5 @@
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Crop, Flash, FlashSlash, Gallery} from 'iconsax-react-native';
@@ -14,14 +14,12 @@ import {
 } from 'react';
 import {
   AnimatableStringValue,
-  Image,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {PlantHistoryType} from '../types/plantType';
 
 import {
   default as ImageCropPicker,
@@ -46,21 +44,16 @@ import {
 } from 'react-native-vision-camera';
 import {addPlantHistory, savePlantImage} from '../api/FirebaseService';
 import {detectPlant, getPlantDirectory} from '../api/LeafClassification';
-import DescComponent from '../components/DescComponent';
 import RowComponent from '../components/RowComponent';
-import SectionComponent from '../components/SectionComponent';
 import SpaceComponent from '../components/SpaceComponent';
-import TitleComponent from '../components/TitleComponent';
 import {PlantType} from '../types/plantType';
 import {resizeImageWithAspectRatio} from '../utils/resizeImage';
-import {colors} from '../constants/colors';
 
 const CameraScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   // *state
   const [isflash, setFlash] = React.useState<boolean>(false);
   const [activeCamera, setActiveCamera] = useState<'front' | 'back'>('back');
-  const [plantDetected, setPlantDetected] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [plantDirectory, setPlantDirectory] = useState<PlantType[]>([]);
 
@@ -161,11 +154,7 @@ const CameraScreen = () => {
 
         const url = await savePlantImage(resultCrop.path);
         const {plantid, status} = await detectPlant(url);
-        setPlantDetected({
-          ...plantDirectory[plantid],
-          status: status,
-          image_url: [url],
-        });
+
         handleSnapPress(0);
         addPlantHistory({
           common_name: plantDirectory[plantid].common_name,
@@ -174,6 +163,15 @@ const CameraScreen = () => {
           plantid: plantid,
           status: status,
           timestamp: new Date().getTime(),
+        });
+        navigation.getParent()?.navigate('HistoryNavigation', {
+          screen: 'DetailPlant',
+          params: {
+            plant: plantDirectory[plantid],
+            status: status,
+            history_plant_image: url,
+          },
+          initial: false,
         });
         setLoading(false);
       } catch (e) {
@@ -236,11 +234,6 @@ const CameraScreen = () => {
       const url = await savePlantImage(resultCrop.path);
 
       const {plantid, status} = await detectPlant(url);
-      setPlantDetected({
-        ...plantDirectory[plantid],
-        status: status,
-        image_url: [url],
-      });
       handleSnapPress(0);
       addPlantHistory({
         common_name: plantDirectory[plantid].common_name,
@@ -249,6 +242,15 @@ const CameraScreen = () => {
         plantid: plantid,
         status: status,
         timestamp: new Date().getTime(),
+      });
+      navigation.getParent()?.navigate('HistoryNavigation', {
+        screen: 'DetailPlant',
+        params: {
+          plant: plantDirectory[plantid],
+          status: status,
+          history_plant_image: url,
+        },
+        initial: false,
       });
       setLoading(false);
     } catch (e) {
@@ -353,8 +355,7 @@ const CameraScreen = () => {
           </TouchableOpacity>
         </Animated.View>
       </RowComponent>
-
-      {/* bottom sheet component */}
+      {/* bottom sheet component
       {plantDetected && (
         <BottomSheet
           ref={sheetRef}
@@ -406,7 +407,7 @@ const CameraScreen = () => {
             </SectionComponent>
           </BottomSheetView>
         </BottomSheet>
-      )}
+      )} */}
     </View>
   );
 };

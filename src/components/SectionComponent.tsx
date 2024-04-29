@@ -7,10 +7,11 @@ interface SectionComponentProps {
   styles?: ViewStyle;
   marginBottom?: number;
   marginTop?: number;
+  bottomOutlines?: boolean;
 }
 
 const SectionComponent = (props: SectionComponentProps) => {
-  const {children, styles, marginBottom, marginTop} = props;
+  const {children, styles, marginBottom, marginTop, bottomOutlines} = props;
   return (
     <View
       style={[
@@ -22,6 +23,15 @@ const SectionComponent = (props: SectionComponentProps) => {
         styles,
       ]}>
       {children}
+      {bottomOutlines && (
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: 'rgba(0,0,0,0.1)',
+            marginTop: 16,
+          }}
+        />
+      )}
     </View>
   );
 };

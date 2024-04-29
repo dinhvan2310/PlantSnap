@@ -142,6 +142,7 @@ const HistoryScreen = () => {
           );
         }}
         data={filteredData}
+        // showsVerticalScrollIndicator={true}
         style={{}}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {

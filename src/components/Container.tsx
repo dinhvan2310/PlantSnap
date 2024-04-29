@@ -30,11 +30,15 @@ const Container = (props: ContainerProps) => {
   if (full) {
     return (
       <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.white,
-          paddingTop: paddingTop || 0,
-        }}>
+        style={[
+          {
+            flex: 1,
+            backgroundColor: colors.white,
+            paddingTop: paddingTop || 0,
+          },
+          ,
+          styles,
+        ]}>
         <View style={{flex: 1}}>{children}</View>
 
         {back && (
@@ -45,7 +49,7 @@ const Container = (props: ContainerProps) => {
               justifyContent: 'center',
               alignItems: 'center',
               position: 'absolute',
-              top: 52,
+              top: 38,
             }}>
             {back && (
               <TouchableOpacity onPress={() => navigation.goBack()}>

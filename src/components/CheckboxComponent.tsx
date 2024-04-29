@@ -6,13 +6,12 @@ import DescComponent from './DescComponent';
 interface CheckboxComponentProps {
   text?: string;
   size?: number;
-  style?: object;
   onPress?: () => void;
 }
 
 const CheckboxComponent = (props: CheckboxComponentProps) => {
   const [checked, setChecked] = useState(false);
-  const {text, size, style, onPress} = props;
+  const {text, size, onPress} = props;
   const handleCheckboxPress = () => {
     if (onPress) {
       onPress();
@@ -32,18 +31,10 @@ const CheckboxComponent = (props: CheckboxComponentProps) => {
       size={16}
       fillColor={colors.primary}
       unfillColor="#FFFFFF"
-      textComponent={
-        <DescComponent
-          text={text}
-          size={size ? size : 12}
-          style={[
-            {
-              marginLeft: 8,
-            },
-            style,
-          ]}
-        />
-      }
+      iconStyle={{
+        marginRight: 8,
+      }}
+      textComponent={<DescComponent text={text} size={size ? size : 12} />}
       textStyle={{
         fontFamily: 'Regular',
         fontSize: 12,

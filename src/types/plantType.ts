@@ -2,7 +2,7 @@ export interface PlantType {
     id: number;
     common_name: string;
     scientific_name: string;
-    another_name: string[];
+    another_name: string;
     description: string;
     ingredient: string;
     uses: string;
