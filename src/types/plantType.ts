@@ -1,6 +1,6 @@
 export interface PlantType {
-    id: number;
-    common_name: string;
+    id_leaf: number;
+    name: string;
     scientific_name: string;
     another_name: string;
     description: string;
@@ -8,9 +8,8 @@ export interface PlantType {
     uses: string;
     medicine: string;
     effect_medicine: string;
-    medicine_preparation: string;
-    note_uses: string;
-    image_url: string[];
+    note_use: string;
+    url_image: string[];
 }
 
 export interface PlantHistoryType {

@@ -2,7 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const httpRequests = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: 'http://192.168.1.15:5000',
   headers: {
     "content-type": "application/json",
   },

@@ -11,7 +11,6 @@ import {Image, StatusBar, Text, View} from 'react-native';
 import {ImageHeaderScrollView} from 'react-native-image-header-scroll-view';
 import {ImageViewer, ImageWrapper} from 'react-native-reanimated-viewer';
 import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import CardTextComponent from '../components/CardTextComponent';
 import Container from '../components/Container';
 import DescComponent from '../components/DescComponent';
@@ -40,11 +39,15 @@ const DetailPlantScreen = ({route, navigation}: any) => {
   // get plant data
   React.useEffect(() => {
     const plant = route.params?.plant;
+    const status = route.params?.status;
+    console.log('status', status);
     if (route.params?.history_plant_image) {
-      plant.image_url = [route.params?.history_plant_image];
+      plant.url_image = [route.params?.history_plant_image];
     }
-    setStatus(route.params?.status);
-    setPlant(route.params?.plant);
+
+    if (status !== undefined) setStatus(Math.round(status) == 1 ? true : false);
+    else setStatus(null);
+    setPlant(plant);
   }, [route, navigation]);
 
   // mock data
@@ -59,7 +62,7 @@ const DetailPlantScreen = ({route, navigation}: any) => {
       }}>
       <ImageViewer
         ref={imageRef}
-        data={(plant?.image_url ?? []).map(el => ({
+        data={(plant?.url_image ?? []).map(el => ({
           key: `key-${el}`,
           source: {uri: el},
         }))}
@@ -77,11 +80,11 @@ const DetailPlantScreen = ({route, navigation}: any) => {
               style={{
                 width: '100%',
               }}
-              key={plant?.image_url[0]}
+              key={plant?.url_image[0]}
               viewerRef={imageRef}
               index={0}
               source={{
-                uri: plant?.image_url[0] || NOTFOUNDIMAGE,
+                uri: plant?.url_image[0] || NOTFOUNDIMAGE,
               }}>
               <Image
                 style={{
@@ -90,7 +93,7 @@ const DetailPlantScreen = ({route, navigation}: any) => {
                   height: 327,
                 }}
                 source={{
-                  uri: plant?.image_url[0] || NOTFOUNDIMAGE,
+                  uri: plant?.url_image[0] || NOTFOUNDIMAGE,
                 }}
               />
             </ImageWrapper>
@@ -102,11 +105,11 @@ const DetailPlantScreen = ({route, navigation}: any) => {
               style={{
                 width: '100%',
               }}
-              key={plant?.image_url[0]}
+              key={plant?.url_image[0]}
               viewerRef={imageRef}
               index={0}
               source={{
-                uri: plant?.image_url[0] || NOTFOUNDIMAGE,
+                uri: plant?.url_image[0] || NOTFOUNDIMAGE,
               }}>
               <Image
                 style={{
@@ -114,7 +117,7 @@ const DetailPlantScreen = ({route, navigation}: any) => {
                   height: 327,
                 }}
                 source={{
-                  uri: plant?.image_url[0] || NOTFOUNDIMAGE,
+                  uri: plant?.url_image[0] || NOTFOUNDIMAGE,
                 }}
               />
             </ImageWrapper>
@@ -127,13 +130,10 @@ const DetailPlantScreen = ({route, navigation}: any) => {
                 style={{
                   flexDirection: 'column',
                 }}>
-                <TitleComponent
-                  title={plant?.common_name}
-                  color={colors.black}
-                />
+                <TitleComponent title={plant?.name} color={colors.black} />
                 <DescComponent text={plant?.scientific_name} />
               </View>
-              {status !== undefined && (
+              {status !== null && (
                 <View
                   style={{
                     backgroundColor: status ? colors.blue : colors.red,
@@ -192,19 +192,6 @@ const DetailPlantScreen = ({route, navigation}: any) => {
           </SectionComponent>
           <SectionComponent>
             <CardTextComponent
-              title="Pha chế thuốc"
-              text={plant?.medicine_preparation}
-              icon={
-                <IconFontAwesome
-                  name="stethoscope"
-                  size={24}
-                  color={colors.black}
-                />
-              }
-            />
-          </SectionComponent>
-          <SectionComponent>
-            <CardTextComponent
               title="Tác dụng phụ"
               text={plant?.effect_medicine}
               icon={
@@ -216,7 +203,7 @@ const DetailPlantScreen = ({route, navigation}: any) => {
           <SectionComponent>
             <CardTextComponent
               title="Lưu ý sử dụng"
-              text={plant?.note_uses}
+              text={plant?.note_use}
               icon={<NoteFavorite size={24} color={colors.black} />}
             />
           </SectionComponent>

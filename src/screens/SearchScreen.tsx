@@ -50,7 +50,7 @@ const SearchScreen = () => {
     } else {
       const filtered = data?.filter(
         item =>
-          item.common_name.toLowerCase().includes(searchInput.toLowerCase()) ||
+          item.name.toLowerCase().includes(searchInput.toLowerCase()) ||
           item.scientific_name
             .toLowerCase()
             .includes(searchInput.toLowerCase()),
@@ -94,9 +94,9 @@ const SearchScreen = () => {
           const marginbottom = index === (data?.length ?? 0) - 1 ? 26 : 0;
           return (
             <CardComponent
-              title={item.common_name}
+              title={item.name}
               desc={item.scientific_name}
-              image={item.image_url[0] ?? NOTFOUND_IMAGE}
+              image={item.url_image[0] ?? NOTFOUND_IMAGE}
               bookmark={true}
               styles={{marginBottom: marginbottom}}
               type="small"

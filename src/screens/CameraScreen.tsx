@@ -1,5 +1,5 @@
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Crop, Flash, FlashSlash, Gallery} from 'iconsax-react-native';
@@ -14,6 +14,7 @@ import {
 } from 'react';
 import {
   AnimatableStringValue,
+  ImageBackground,
   StatusBar,
   StyleSheet,
   Text,
@@ -48,6 +49,10 @@ import RowComponent from '../components/RowComponent';
 import SpaceComponent from '../components/SpaceComponent';
 import {PlantType} from '../types/plantType';
 import {resizeImageWithAspectRatio} from '../utils/resizeImage';
+import DescComponent from '../components/DescComponent';
+import TitleComponent from '../components/TitleComponent';
+import {colors} from '../constants/colors';
+import CardComponent from '../components/CardComponent';
 
 const CameraScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -56,6 +61,7 @@ const CameraScreen = () => {
   const [activeCamera, setActiveCamera] = useState<'front' | 'back'>('back');
   const [loading, setLoading] = useState<boolean>(false);
   const [plantDirectory, setPlantDirectory] = useState<PlantType[]>([]);
+  const [plantDetected, setPlantDetected] = useState<any>(null);
 
   useEffect(() => {
     const fetchPlantDirectory = async () => {
@@ -129,6 +135,26 @@ const CameraScreen = () => {
     );
   }
 
+  const handleNavigation = (plantid: number, url: string, status: boolean) => {
+    addPlantHistory({
+      common_name: plantDirectory[plantid].name,
+      scientific_name: plantDirectory[plantid].scientific_name,
+      image_url: url,
+      plantid: plantid,
+      status: status,
+      timestamp: new Date().getTime(),
+    });
+    navigation.getParent()?.navigate('HistoryNavigation', {
+      screen: 'DetailPlant',
+      params: {
+        plant: plantDirectory[plantid],
+        status: status,
+        history_plant_image: url,
+      },
+      initial: false,
+    });
+  };
+
   // Todo: Action
   const handleSwitchCamera = () => {
     setActiveCamera(activeCamera === 'back' ? 'front' : 'back');
@@ -153,26 +179,37 @@ const CameraScreen = () => {
         });
 
         const url = await savePlantImage(resultCrop.path);
-        const {plantid, status} = await detectPlant(url);
+        const {
+          plant_id_top1,
+          plant_id_top2,
+          plant_id_top3,
+          score_top1,
+          score_top2,
+          score_top3,
+          status,
+          error,
+        }: any = await detectPlant(url);
 
-        handleSnapPress(0);
-        addPlantHistory({
-          common_name: plantDirectory[plantid].common_name,
-          scientific_name: plantDirectory[plantid].scientific_name,
-          image_url: url,
-          plantid: plantid,
+        if (error) {
+          console.log('Error detected plant', error);
+          setPlantDetected({
+            error: true,
+          });
+          setLoading(false);
+          return;
+        }
+
+        setPlantDetected({
+          plant_id_top1: plant_id_top1,
+          plant_id_top2: plant_id_top2,
+          plant_id_top3: plant_id_top3,
+          score_top1: score_top1,
+          score_top2: score_top2,
+          score_top3: score_top3,
           status: status,
-          timestamp: new Date().getTime(),
+          image_url: url,
         });
-        navigation.getParent()?.navigate('HistoryNavigation', {
-          screen: 'DetailPlant',
-          params: {
-            plant: plantDirectory[plantid],
-            status: status,
-            history_plant_image: url,
-          },
-          initial: false,
-        });
+        handleSnapPress(0);
         setLoading(false);
       } catch (e) {
         setLoading(false);
@@ -233,25 +270,36 @@ const CameraScreen = () => {
 
       const url = await savePlantImage(resultCrop.path);
 
-      const {plantid, status} = await detectPlant(url);
-      handleSnapPress(0);
-      addPlantHistory({
-        common_name: plantDirectory[plantid].common_name,
-        scientific_name: plantDirectory[plantid].scientific_name,
-        image_url: url,
-        plantid: plantid,
+      const {
+        plant_id_top1,
+        plant_id_top2,
+        plant_id_top3,
+        score_top1,
+        score_top2,
+        score_top3,
+        status,
+        error,
+      }: any = await detectPlant(url);
+      if (error) {
+        console.log('Error detected plant', error);
+        setPlantDetected({
+          error: true,
+        });
+        setLoading(false);
+        return;
+      }
+
+      setPlantDetected({
+        plant_id_top1: plant_id_top1,
+        plant_id_top2: plant_id_top2,
+        plant_id_top3: plant_id_top3,
+        score_top1: score_top1,
+        score_top2: score_top2,
+        score_top3: score_top3,
         status: status,
-        timestamp: new Date().getTime(),
+        image_url: url,
       });
-      navigation.getParent()?.navigate('HistoryNavigation', {
-        screen: 'DetailPlant',
-        params: {
-          plant: plantDirectory[plantid],
-          status: status,
-          history_plant_image: url,
-        },
-        initial: false,
-      });
+      handleSnapPress(0);
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -355,7 +403,7 @@ const CameraScreen = () => {
           </TouchableOpacity>
         </Animated.View>
       </RowComponent>
-      {/* bottom sheet component
+      {/* bottom sheet component */}
       {plantDetected && (
         <BottomSheet
           ref={sheetRef}
@@ -364,50 +412,169 @@ const CameraScreen = () => {
           index={plantDetected ? 0 : -1}
           onChange={handleSheetChange}>
           <BottomSheetView>
-            <SectionComponent>
-              <TouchableOpacity
-                onPress={() => {
-                  console.log('navigate to detail plant', plantDetected);
-                  navigation.getParent()?.navigate('HistoryNavigation', {
-                    screen: 'DetailPlant',
-                    params: {
-                      plant: plantDirectory[plantDetected?.id],
-                      status: plantDetected.status,
-                      history_plant_image: plantDetected.image_url[0],
-                    },
-                    initial: false,
-                  });
-                }}>
-                <TitleComponent title={plantDetected.common_name} />
-              </TouchableOpacity>
-              <DescComponent text={plantDetected.scientific_name} />
-            </SectionComponent>
-            <SectionComponent>
-              <DescComponent text="Status" size={24} lineHeight={24} />
-              <DescComponent
-                text={plantDetected.status ? 'healthy' : 'unhealthy'}
-                color={colors.red}
-              />
-            </SectionComponent>
-            <SectionComponent>
-              <DescComponent text="Description" size={24} lineHeight={24} />
-              <DescComponent text={plantDetected.description} />
-            </SectionComponent>
-            <SectionComponent>
-              <Image
-                source={{
-                  uri: plantDetected.image_url[0],
-                }}
+            {plantDetected.error ? (
+              <View style={{height: 200, backgroundColor: 'coral'}} />
+            ) : (
+              <View
                 style={{
-                  width: '100%',
                   height: '100%',
-                  borderRadius: 8,
-                }}
-              />
-            </SectionComponent>
+                  paddingHorizontal: 8,
+                }}>
+                <TitleComponent
+                  style={{
+                    textAlign: 'center',
+                  }}
+                  title="Plant Detected Result"
+                  color={colors.gray}
+                />
+                <SpaceComponent height={16} />
+                <ImageBackground
+                  style={{
+                    height: 200,
+                    borderRadius: 8,
+                    justifyContent: 'flex-end',
+                    overflow: 'hidden',
+                  }}
+                  source={{
+                    uri: plantDirectory[plantDetected.plant_id_top1]
+                      .url_image[0],
+                  }}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      handleNavigation(
+                        plantDetected.plant_id_top1,
+                        plantDetected.image_url,
+                        plantDetected.status,
+                      );
+                    }}
+                    style={{
+                      backgroundColor: 'rgba(0,0,0,0.3)',
+                      padding: 8,
+                      borderRadius: 8,
+                    }}>
+                    <RowComponent justify="space-between">
+                      <TitleComponent
+                        title={plantDirectory[plantDetected.plant_id_top1].name}
+                        color={colors.white}
+                      />
+                      <DescComponent
+                        text={`${Number(plantDetected.score_top1) * 100} %`}
+                        color={colors.secondary}
+                        fontFamily="Regular"
+                        size={22}
+                      />
+                    </RowComponent>
+                    <DescComponent
+                      text={
+                        plantDirectory[plantDetected.plant_id_top1]
+                          .scientific_name
+                      }
+                      color={colors.white}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
+                <SpaceComponent height={16} />
+                <ImageBackground
+                  style={{
+                    height: 200,
+                    borderRadius: 8,
+                    justifyContent: 'flex-end',
+                    overflow: 'hidden',
+                  }}
+                  source={{
+                    uri: plantDirectory[plantDetected.plant_id_top2]
+                      .url_image[0],
+                  }}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      handleNavigation(
+                        plantDetected.plant_id_top2,
+                        plantDetected.image_url,
+                        plantDetected.status,
+                      );
+                    }}
+                    style={{
+                      backgroundColor: 'rgba(0,0,0,0.3)',
+                      padding: 8,
+                      borderRadius: 8,
+                    }}>
+                    <RowComponent justify="space-between">
+                      <TitleComponent
+                        title={plantDirectory[plantDetected.plant_id_top2].name}
+                        color={colors.white}
+                      />
+                      <DescComponent
+                        text={`${Number(plantDetected.score_top2) * 100} %`}
+                        color={colors.secondary}
+                        fontFamily="Regular"
+                        size={22}
+                      />
+                    </RowComponent>
+                    <DescComponent
+                      text={
+                        plantDirectory[plantDetected.plant_id_top2]
+                          .scientific_name
+                      }
+                      color={colors.white}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
+                <SpaceComponent height={16} />
+                <ImageBackground
+                  style={{
+                    height: 200,
+                    borderRadius: 8,
+                    justifyContent: 'flex-end',
+                    overflow: 'hidden',
+                  }}
+                  source={{
+                    uri: plantDirectory[plantDetected.plant_id_top3]
+                      .url_image[0],
+                  }}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      handleNavigation(
+                        plantDetected.plant_id_top3,
+                        plantDetected.image_url,
+                        plantDetected.status,
+                      );
+                    }}
+                    style={{
+                      backgroundColor: 'rgba(0,0,0,0.3)',
+                      padding: 8,
+                      borderRadius: 8,
+                    }}>
+                    <RowComponent justify="space-between">
+                      <TitleComponent
+                        title={plantDirectory[plantDetected.plant_id_top3].name}
+                        color={colors.white}
+                      />
+                      <DescComponent
+                        text={`${Number(
+                          Number(plantDetected.score_top3) * 100,
+                        ).toFixed(2)} %`}
+                        color={colors.secondary}
+                        fontFamily="Regular"
+                        size={22}
+                      />
+                    </RowComponent>
+                    <DescComponent
+                      text={
+                        plantDirectory[plantDetected.plant_id_top3]
+                          .scientific_name
+                      }
+                      color={colors.white}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
+              </View>
+            )}
           </BottomSheetView>
         </BottomSheet>
-      )} */}
+      )}
     </View>
   );
 };
