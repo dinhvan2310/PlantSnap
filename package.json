@@ -26,6 +26,7 @@
     "iconsax-react-native": "^0.0.8",
     "javascript-time-ago": "^2.5.10",
     "lottie-react-native": "^6.7.0",
+    "query-string": "^9.0.0",
     "react": "18.2.0",
     "react-native": "0.73.7",
     "react-native-bouncy-checkbox": "^3.0.7",

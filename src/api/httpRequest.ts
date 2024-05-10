@@ -2,7 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const httpRequests = axios.create({
-  baseURL: 'http://192.168.1.15:5000',
+  baseURL: 'http://3.112.229.134/api',
   headers: {
     "content-type": "application/json",
   },
