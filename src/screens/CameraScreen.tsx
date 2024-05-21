@@ -45,14 +45,13 @@ import {
 } from 'react-native-vision-camera';
 import {addPlantHistory, savePlantImage} from '../api/FirebaseService';
 import {detectPlant, getPlantDirectory} from '../api/LeafClassification';
+import DescComponent from '../components/DescComponent';
 import RowComponent from '../components/RowComponent';
 import SpaceComponent from '../components/SpaceComponent';
-import {PlantType} from '../types/plantType';
-import {resizeImageWithAspectRatio} from '../utils/resizeImage';
-import DescComponent from '../components/DescComponent';
 import TitleComponent from '../components/TitleComponent';
 import {colors} from '../constants/colors';
-import CardComponent from '../components/CardComponent';
+import {PlantType} from '../types/plantType';
+import {resizeImageWithAspectRatio} from '../utils/resizeImage';
 
 const CameraScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -436,8 +435,7 @@ const CameraScreen = () => {
                     overflow: 'hidden',
                   }}
                   source={{
-                    uri: plantDirectory[plantDetected.plant_id_top1]
-                      .url_image[0],
+                    uri: plantDirectory[plantDetected.plant_id_top1].url_image1,
                   }}>
                   <TouchableOpacity
                     activeOpacity={0.8}
@@ -483,8 +481,7 @@ const CameraScreen = () => {
                     overflow: 'hidden',
                   }}
                   source={{
-                    uri: plantDirectory[plantDetected.plant_id_top2]
-                      .url_image[0],
+                    uri: plantDirectory[plantDetected.plant_id_top2].url_image1,
                   }}>
                   <TouchableOpacity
                     activeOpacity={0.8}
@@ -530,8 +527,7 @@ const CameraScreen = () => {
                     overflow: 'hidden',
                   }}
                   source={{
-                    uri: plantDirectory[plantDetected.plant_id_top3]
-                      .url_image[0],
+                    uri: plantDirectory[plantDetected.plant_id_top3].url_image1,
                   }}>
                   <TouchableOpacity
                     activeOpacity={0.8}

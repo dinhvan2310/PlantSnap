@@ -96,7 +96,7 @@ const SearchScreen = () => {
             <CardComponent
               title={item.name}
               desc={item.scientific_name}
-              image={item.url_image[0] ?? NOTFOUND_IMAGE}
+              image={item.url_image1 ?? NOTFOUND_IMAGE}
               bookmark={true}
               styles={{marginBottom: marginbottom}}
               type="small"

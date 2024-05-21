@@ -14,6 +14,7 @@ interface InputComponentProps {
   styles?: ViewStyle;
   icon?: React.ReactNode;
   clear?: boolean;
+  multiple?: boolean;
 }
 
 const InputComponent = ({
@@ -23,6 +24,7 @@ const InputComponent = ({
   value,
   keyboardType,
   isPassword,
+  multiple,
   styles,
   icon,
 }: InputComponentProps) => {
@@ -49,8 +51,11 @@ const InputComponent = ({
         placeholderTextColor={colors.placeholder}
         onChangeText={onChange}
         value={value}
+        multiline={multiple}
+        numberOfLines={multiple ? 4 : 1}
         keyboardType={keyboardType ?? 'default'}
         secureTextEntry={isPassword && !showPassword}
+        textAlignVertical="top"
         style={{
           lineHeight: 24,
           fontFamily: 'Regular',

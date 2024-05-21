@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import DetailPlantScreen from '../../screens/DetailPlantScreen';
 import HistoryScreen from '../../screens/HistoryScreen';
+import FeedbackScreen from '../../screens/FeedbackScreen';
 
 const Stack = createNativeStackNavigator();
 const HistoryNavigation = () => {
@@ -16,6 +17,7 @@ const HistoryNavigation = () => {
         name="DetailPlant"
         component={DetailPlantScreen}
       />
+      <Stack.Screen name="Feedback" component={FeedbackScreen} />
     </Stack.Navigator>
   );
 };

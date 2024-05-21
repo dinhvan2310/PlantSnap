@@ -2,6 +2,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { PlantHistoryType, PlantType } from '../types/plantType';
+import { FeedbackType } from '../types/feedback';
 
 export const savePlantImage = async (image_url: string) => {
     const storageRef = storage().ref(
@@ -43,7 +44,6 @@ export const addPlantHistory = async (plant: PlantHistoryType) => {
          }
 
 
-        
     } catch (error) {
         throw error;
     }
@@ -116,6 +116,37 @@ export const realTimePlantHistory = async (callback: (data: PlantHistoryType[]) 
                 callback(history);
             }
         });
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const sendFeedback = async (feedback: FeedbackType) => {
+    const user = auth().currentUser;
+    if (!user) {
+        throw new Error('User not found');
+    }
+    const uid = user.uid;
+    console.log('Feedback:', feedback);
+    try {
+        const feedbackRef = firestore().collection('feedback').doc(uid);
+        const feedbackSnapshot = await feedbackRef.get(); 
+        if (feedbackSnapshot.exists) { 
+            feedbackRef.update({
+                history: firestore.FieldValue.arrayUnion(feedback),
+            }).then(() => {
+                console.log('feedback history updated!');
+            });
+         } 
+        else { 
+            feedbackRef.set({
+                history: [feedback],
+            }).then(() => {
+                console.log('feedback history added!');
+            });
+         }
+
+
     } catch (error) {
         throw error;
     }

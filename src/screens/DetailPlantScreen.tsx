@@ -5,9 +5,10 @@ import {
   Hospital,
   NoteFavorite,
   SunFog,
+  Warning2,
 } from 'iconsax-react-native';
 import React, {useCallback, useRef} from 'react';
-import {Image, StatusBar, Text, View} from 'react-native';
+import {Image, StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import {ImageHeaderScrollView} from 'react-native-image-header-scroll-view';
 import {ImageViewer, ImageWrapper} from 'react-native-reanimated-viewer';
 import IconFeather from 'react-native-vector-icons/Feather';
@@ -47,6 +48,15 @@ const DetailPlantScreen = ({route, navigation}: any) => {
 
     if (status !== undefined) setStatus(Math.round(status) == 1 ? true : false);
     else setStatus(null);
+
+    // config plant
+    plant.url_image = [
+      plant.url_image1,
+      plant.url_image2,
+      plant.url_image3,
+      plant.url_image4,
+    ];
+
     setPlant(plant);
   }, [route, navigation]);
 
@@ -134,23 +144,38 @@ const DetailPlantScreen = ({route, navigation}: any) => {
                 <DescComponent text={plant?.scientific_name} />
               </View>
               {status !== null && (
-                <View
-                  style={{
-                    backgroundColor: status ? colors.blue : colors.red,
-                    paddingVertical: 8,
-                    paddingHorizontal: 24,
-                    borderRadius: 16,
-                  }}>
-                  <Text
+                <RowComponent>
+                  <View
                     style={{
-                      color: colors.white,
-                      fontSize: 16,
-                      fontWeight: '600',
-                      lineHeight: 24,
+                      backgroundColor: status ? colors.blue : colors.red,
+                      paddingVertical: 8,
+                      paddingHorizontal: 24,
+                      borderRadius: 16,
                     }}>
-                    {status ? 'Healthy' : 'Not healthy'}
-                  </Text>
-                </View>
+                    <Text
+                      style={{
+                        color: colors.white,
+                        fontSize: 16,
+                        fontWeight: '600',
+                        lineHeight: 24,
+                      }}>
+                      {status ? 'Healthy' : 'Not healthy'}
+                    </Text>
+                  </View>
+                  <SpaceComponent width={16} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Feedback', {
+                        plantId: plant?.id_leaf,
+                      });
+                    }}>
+                    <Warning2
+                      name="message-circle"
+                      size={24}
+                      color={colors.red}
+                    />
+                  </TouchableOpacity>
+                </RowComponent>
               )}
             </RowComponent>
           </SectionComponent>
@@ -212,17 +237,6 @@ const DetailPlantScreen = ({route, navigation}: any) => {
       </ImageHeaderScrollView>
     </Container>
   );
-
-  // return (
-  //   <Container
-  //     back={true}
-  //     full={true}
-  //     styles={{
-  //       backgroundColor: 'transparent',
-  //     }}>
-
-  //   </Container>
-  // );
 };
 
 export default DetailPlantScreen;

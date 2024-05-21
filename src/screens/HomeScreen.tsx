@@ -13,6 +13,8 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const user = auth().currentUser;
 
+  console.log(user);
+
   useFocusEffect(
     useCallback(() => {
       StatusBar.setBackgroundColor('rgba(0,0,0,0)');

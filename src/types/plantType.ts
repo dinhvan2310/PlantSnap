@@ -10,6 +10,10 @@ export interface PlantType {
     effect_medicine: string;
     note_use: string;
     url_image: string[];
+    url_image1: string;
+    url_image2: string;
+    url_image3: string;
+    url_image4: string;
 }
 
 export interface PlantHistoryType {

@@ -2,16 +2,19 @@ import React, {useState} from 'react';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {colors} from '../constants/colors';
 import DescComponent from './DescComponent';
+import {View} from 'react-native-reanimated/lib/typescript/Animated';
+import {ViewStyle} from 'react-native';
 
 interface CheckboxComponentProps {
   text?: string;
   size?: number;
+  style: ViewStyle;
   onPress?: () => void;
 }
 
 const CheckboxComponent = (props: CheckboxComponentProps) => {
   const [checked, setChecked] = useState(false);
-  const {text, size, onPress} = props;
+  const {text, size, onPress, style} = props;
   const handleCheckboxPress = () => {
     if (onPress) {
       onPress();
@@ -23,11 +26,12 @@ const CheckboxComponent = (props: CheckboxComponentProps) => {
 
   return (
     <BouncyCheckbox
-      style={
+      style={[
         {
           // marginLeft: 16,
-        }
-      }
+        },
+        style,
+      ]}
       size={16}
       fillColor={colors.primary}
       unfillColor="#FFFFFF"

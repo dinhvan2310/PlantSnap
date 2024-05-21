@@ -1,17 +1,9 @@
-import React from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
-import {colors} from '../constants/colors';
-import propTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
-import RowComponent from './RowComponent';
 import {ArrowLeft2} from 'iconsax-react-native';
-import DescComponent from './DescComponent';
+import React from 'react';
+import {TouchableOpacity, View, ViewStyle} from 'react-native';
+import {colors} from '../constants/colors';
+import RowComponent from './RowComponent';
 
 interface ContainerProps {
   back?: boolean;
@@ -20,10 +12,11 @@ interface ContainerProps {
   styles?: ViewStyle;
   full?: boolean;
   statusBarColor?: string;
+  backColor?: string;
 }
 
 const Container = (props: ContainerProps) => {
-  const {back, children, styles, full, paddingTop} = props;
+  const {back, children, styles, full, paddingTop, backColor} = props;
 
   const navigation = useNavigation();
 
@@ -53,7 +46,7 @@ const Container = (props: ContainerProps) => {
             }}>
             {back && (
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <ArrowLeft2 size={24} color={colors.secondary} />
+                <ArrowLeft2 size={24} color={backColor ?? colors.secondary} />
               </TouchableOpacity>
             )}
           </RowComponent>
@@ -79,12 +72,16 @@ const Container = (props: ContainerProps) => {
           styles={{
             paddingHorizontal: 16,
             paddingBottom: 16,
-            justifyContent: 'center',
             alignItems: 'center',
           }}>
           {back && (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <ArrowLeft2 size={24} color={colors.white} />
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                left: 16,
+              }}
+              onPress={() => navigation.goBack()}>
+              <ArrowLeft2 size={24} color={backColor ?? colors.secondary} />
             </TouchableOpacity>
           )}
         </RowComponent>

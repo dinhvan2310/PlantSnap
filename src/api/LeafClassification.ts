@@ -17,7 +17,7 @@ export const detectPlant = async (image_url: string) => {
   const formData = new FormData();
   formData.append('image_url', image_url);
   try {
-    const response = await httpRequests.post('/predict-url', formData, {
+    const response = await httpRequests.post('/predict_url', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -54,7 +54,7 @@ export const detectPlant = async (image_url: string) => {
 
 
 export const getPlantDirectory = async (): Promise<PlantType[]> => {
-  return httpRequests.get('/plant-data')
+  return httpRequests.get('/leaf')
 }
 
 

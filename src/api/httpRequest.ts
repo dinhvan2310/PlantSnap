@@ -1,13 +1,15 @@
 import axios from "axios";
 import queryString from "query-string";
 
+
 const httpRequests = axios.create({
-  baseURL: 'http://3.112.229.134/api',
+  baseURL: 'http://192.168.101.20:8001',
   headers: {
     "content-type": "application/json",
   },
   paramsSerializer: (params) => queryString.stringify(params),
 });
+
 
 httpRequests.interceptors.request.use(async (config) => {
   // Handle token here ...
