@@ -1,6 +1,6 @@
 # PlantSnap App 
 
-> PlantSnap API: https://plantsnap.com/api
+> PlantSnap API: [github.com/dinhvan2310/PlantSnap_API](https://github.com/dinhvan2310/PlantSnap_API)
 
 This is a simple app that uses the PlantSnap API to identify plants from images taken by the user or uploaded from the gallery of the device and displays the results in a list. The user can then click on the list item to view more details about the plant including the common name, scientific name, and a brief description.
 
