@@ -3,7 +3,7 @@ import queryString from "query-string";
 
 
 const httpRequests = axios.create({
-  baseURL: 'http://192.168.101.20:8001',
+  baseURL: 'http://192.168.1.16:5000',
   headers: {
     "content-type": "application/json",
   },

@@ -1,45 +1,35 @@
-## 3. Mobile App 
-### 3.1. Description
-PlanSnap là một ứng dụng di động giúp người dùng nhận diện và lưu trữ thông tin về các loại cây dược liệu thông qua việc chụp ảnh và phân loại cây. Ứng dụng cung cấp thông tin chi tiết về cây, cách chăm sóc, cách sử dụng, cách phân biệt các loại cây cùng với hình ảnh minh họa.
-### 3.2. Features
-- Chụp ảnh cây dược liệu
-- Phân loại cây dược liệu, tình trạng cây
-- Hiển thị thông tin chi tiết về cây dược liệu
-- Hiển thị hình ảnh minh họa
-- Hiển thị cách chăm sóc, cách sử dụng, cách phân biệt các loại cây
-### 3.3. Technologies
-- React Native
-- Firebase
-### 3.4. Figma Design
-- [Figma Design](https://www.figma.com/file/1
-### 3.5. Github Repository
-- [Github Repository](
+# PlantSnap App 
 
-### 3.6. Progress 
-- [x] Design UI/UX
-- [x] Firebase authentication (Google, Facebook, Email)
-- [x] Firebase Firestore
-- [x] Camera module
-- [] Implement UI/UX
-- [] Classify plant
-- [] Display plant information
-- [] Display history of plant
+> PlantSnap API: https://plantsnap.com/api
 
-###  3.7. Plan for the next 2 weeks
-- Implement UI/UX
-- Classify plant
-- Display plant information
+This is a simple app that uses the PlantSnap API to identify plants from images taken by the user or uploaded from the gallery of the device and displays the results in a list. The user can then click on the list item to view more details about the plant including the common name, scientific name, and a brief description.
 
 
-set(ENABLE_FRAME_PROCESSORS ON)
+## My Figma Design
+
+https://www.figma.com/design/50gvxj5Vl9TpBgboHayvKb/Untitled?node-id=0-1&t=MvIi5hKE3poiXst8-0
 
 
-# Path: README.md
+## Features 
 
-- Bottom sheet for plant information on camera screen: bug, need to fix
-  - first time task photo, bottom sheet is not displayed correctly
-  - if task photo is taken again, bottom sheet is displayed correctly
-  - add icon loading for image processing
+- Login with Google, Facebook, or email and password
+- Take a photo or upload an image from the gallery to identify a plant 
+- View the results in a list 
+- Click on a list item to view more details about the plant
+- Save history of plant identifications 
+- Send feedback to the developers 
 
+## Screenshots 
 
-  Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+<img src="screenshots/LoginScreen.png" width="200">
+<img src="screenshots/SignupScreen.png" width="200">
+<img src="screenshots/ForgetPassScreen.png" width="200">
+<img src="screenshots/HomeScreen.png" width="200">
+<img src="screenshots/SearchScreen.png" width="200">
+<img src="screenshots/CameraScreen.png" width="200">
+<img src="screenshots/Gallery.png" width="200">
+<img src="screenshots/Crop.png" width="200">
+<img src="screenshots/DetectScreen.png" width="200">
+<img src="screenshots/HistoryScreen.png" width="200">
+<img src="screenshots/PlantDetailScreen.png" width="200">
+<img src="screenshots/Feedback.png" width="200">

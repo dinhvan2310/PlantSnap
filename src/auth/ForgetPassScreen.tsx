@@ -70,6 +70,9 @@ const ForgetPassScreen = (props: ForgetPassScreenProps) => {
       </SectionComponent>
       <SectionComponent>
         <ButtonComponent
+          buttonStyle={{
+            flex: 0,
+          }}
           text="Send Email"
           onPress={handleForgetPassword}
           isLoading={isLoading}

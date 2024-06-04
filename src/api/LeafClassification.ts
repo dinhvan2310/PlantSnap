@@ -1,11 +1,6 @@
+import axios from "axios";
 import { PlantHistoryType, PlantType } from "../types/plantType";
 import httpRequests from "./httpRequest";
-
-// export const detectPlant = async (image_url: string): Promise<any> => {
-//   return httpRequests.post('https://flask-hello-world-two-ebon.vercel.app/detect', {
-//     'image_url': image_url
-//   })
-// };
 
 export const detectPlant = async (image_url: string) => {
   // const random_id = Math.floor(Math.random() * 10);
@@ -54,7 +49,7 @@ export const detectPlant = async (image_url: string) => {
 
 
 export const getPlantDirectory = async (): Promise<PlantType[]> => {
-  return httpRequests.get('/leaf')
+  return httpRequests.get('/plant-data')
 }
 
 

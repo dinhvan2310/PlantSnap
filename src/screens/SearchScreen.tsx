@@ -38,6 +38,7 @@ const SearchScreen = () => {
     const func = async () => {
       // fetch data
       const data = await getPlantDirectory();
+      console.log(data);
       setFilteredData(data);
       setData(data);
     };
