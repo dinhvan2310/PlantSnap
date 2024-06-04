@@ -33,3 +33,5 @@ https://www.figma.com/design/50gvxj5Vl9TpBgboHayvKb/Untitled?node-id=0-1&t=MvIi5
 <img src="screenshots/HistoryScreen.png" width="200">
 <img src="screenshots/PlantDetailScreen.png" width="200">
 <img src="screenshots/Feedback.png" width="200">
+
+![alt-text-1](screenshots/LoginScreen.png "title-1") ![alt-text-2](screenshots/SignupScreen.png "title-2")
